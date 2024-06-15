@@ -1,5 +1,7 @@
 import React, { FC, useState } from 'react'
-import QuestionCard from '../components/QuestionCard/QuestionCard'
+import QuestionCard from '../../components/QuestionCard'
+import { useSearchParams } from 'react-router-dom'
+import { useTitle } from 'ahooks'
 
 const questionListRaw: List.QuestionProp[] = Array(5)
   .fill(null)
@@ -15,8 +17,9 @@ const questionListRaw: List.QuestionProp[] = Array(5)
   })
 
 const List: FC = () => {
-  console.log(questionListRaw)
-
+  useTitle('问卷调查 - 问卷列表')
+  const [searchParams] = useSearchParams()
+  const keyword = searchParams.get('keyword')
   const [questionList, setQuestionList] = useState(questionListRaw)
   return (
     <>
@@ -31,7 +34,7 @@ const List: FC = () => {
           <QuestionCard key={q._id} {...q} />
         ))}
       </div>
-      <footer className="text-center">footer</footer>
+      <footer className="text-center">footer{keyword}</footer>
     </>
   )
 }

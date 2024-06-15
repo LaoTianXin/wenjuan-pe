@@ -3,7 +3,7 @@ import QuestionCard from '../../components/QuestionCard'
 import { useSearchParams } from 'react-router-dom'
 import { useTitle } from 'ahooks'
 
-const questionListRaw: List.QuestionProp[] = Array(5)
+const questionListRaw: List.QuestionProp[] = Array(4)
   .fill(null)
   .map((_, index) => {
     return {
@@ -34,7 +34,6 @@ const List: FC = () => {
           <QuestionCard key={q._id} {...q} />
         ))}
       </div>
-      <footer className="text-center">footer{keyword}</footer>
     </>
   )
 }

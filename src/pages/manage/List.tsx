@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react'
 import QuestionCard from '../../components/QuestionCard'
-import { useSearchParams } from 'react-router-dom'
 import { useTitle } from 'ahooks'
+import { Typography, Empty } from 'antd'
 
+const { Title } = Typography
 const questionListRaw: List.QuestionProp[] = Array(4)
   .fill(null)
   .map((_, index) => {
@@ -18,21 +19,21 @@ const questionListRaw: List.QuestionProp[] = Array(4)
 
 const List: FC = () => {
   useTitle('问卷调查 - 问卷列表')
-  const [searchParams] = useSearchParams()
-  const keyword = searchParams.get('keyword')
   const [questionList, setQuestionList] = useState(questionListRaw)
   return (
     <>
       <header className="flex">
         <div className="flex-1">
-          <div className="text-2xl">我的问卷</div>
+          <Title level={3}>我的问卷</Title>
         </div>
         <div className="flex-1 text-right">(搜索)</div>
       </header>
       <div className="m-10">
-        {questionList.map(q => (
-          <QuestionCard key={q._id} {...q} />
-        ))}
+        {!questionList || questionList.length === 0 ? (
+          <Empty description={'暂无问卷'}></Empty>
+        ) : (
+          questionList.map(q => <QuestionCard key={q._id} {...q} />)
+        )}
       </div>
     </>
   )

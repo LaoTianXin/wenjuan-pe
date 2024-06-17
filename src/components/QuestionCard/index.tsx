@@ -38,7 +38,7 @@ const QuestionCard: FC<QuestionCard.QuestionProp> = ({
   }
   return (
     <div className="px-3 mb-5 transition-all duration-300 bg-white rounded-lg hover:shadow-md">
-      <div className="flex items-center justify-between py-3 ">
+      <div className="flex items-center justify-between pt-3 ">
         <Link
           to={
             isPublished
@@ -57,8 +57,8 @@ const QuestionCard: FC<QuestionCard.QuestionProp> = ({
           <div>{createAt}</div>
         </div>
       </div>
-      <Divider className="my-2"></Divider>
-      <div className="flex items-center justify-between p-3 text-lg cursor-pointer">
+      <Divider className="my-3"></Divider>
+      <div className="flex items-center justify-between p-3 pt-0 text-lg cursor-pointer">
         <div className="flex items-center text-gray-300">
           <Space>
             <Button

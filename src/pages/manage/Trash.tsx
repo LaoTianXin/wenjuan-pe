@@ -101,10 +101,10 @@ const Trash: FC = () => {
   )
 
   return (
-    <>
-      <header className="flex">
+    <div className="m-5">
+      <header className="flex mb-3">
         <div className="flex-1">
-          <Title level={3}>星标问卷</Title>
+          <Title level={3}>回收站</Title>
         </div>
         <div className="flex-1 text-right">(搜索)</div>
       </header>
@@ -115,7 +115,7 @@ const Trash: FC = () => {
           TableElement
         )}
       </div>
-    </>
+    </div>
   )
 }
 

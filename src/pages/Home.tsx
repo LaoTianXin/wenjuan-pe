@@ -1,10 +1,18 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Typography } from 'antd'
 import { PathNameEnum } from '../router/pathNameEnum'
 
 const { Title, Paragraph } = Typography
 const Home: FC = () => {
+  useEffect(() => {
+    fetch('/api/test')
+      .then(res => res.json())
+      .then(res => {
+        console.log('🚀 ~ useEffect ~ res:', res)
+      })
+  }, [])
+
   const nav = useNavigate()
   return (
     <div

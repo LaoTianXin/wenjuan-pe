@@ -10,25 +10,16 @@ import {
   TableColumnsType,
   Modal,
   message,
+  Spin,
 } from 'antd'
 import { DeleteOutlined, RestOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
+import { useLoadQuestionListData } from '../../hooks/useLoadQuestionListData'
+import ListSearch from '../../components/ListSearch'
 
 const { Title } = Typography
 const { confirm } = Modal
-const questionListRaw: List.QuestionProp[] = Array(5)
-  .fill(null)
-  .map((_, index) => {
-    return {
-      _id: Math.random().toString().slice(3, 8),
-      title: '问卷' + (index + 1),
-      isPublished: Math.random() > 0.5,
-      isStar: Math.random() > 0.5,
-      answerCount: Math.floor(Math.random() * 100),
-      createAt: new Date().toLocaleString(),
-    }
-  })
 
-const columns: TableColumnsType<List.QuestionProp> = [
+const columns: TableColumnsType<Question.QuestionDataProp> = [
   {
     title: '问卷标题',
     dataIndex: 'title',
@@ -53,7 +44,8 @@ const columns: TableColumnsType<List.QuestionProp> = [
 
 const Trash: FC = () => {
   useTitle('问卷调查 - 回收站')
-  const [questionList, setQuestionList] = useState(questionListRaw)
+  const { data, loading, error } = useLoadQuestionListData({ isDeleted: true })
+  const { list: questionList = [], total } = data || {}
   const [selectIds, setSelectIds] = useState<React.Key[]>([])
 
   const onRowSelectChange = (selectedRowKeys: React.Key[]) => {
@@ -106,15 +98,20 @@ const Trash: FC = () => {
         <div className="flex-1">
           <Title level={3}>回收站</Title>
         </div>
-        <div className="flex-1 text-right">(搜索)</div>
+        <div className="flex-1 text-right">
+          <ListSearch></ListSearch>
+        </div>
       </header>
-      <div className="m-10">
-        {!questionList || questionList.length === 0 ? (
-          <Empty description={'暂无回收问卷'}></Empty>
-        ) : (
-          TableElement
-        )}
-      </div>
+
+      <Spin spinning={loading} tip={'加载中...'} size={'large'}>
+        <div className="min-h-[500px] m-10">
+          {!loading && (!questionList || questionList.length === 0) ? (
+            <Empty description={'暂无回收问卷'}></Empty>
+          ) : (
+            TableElement
+          )}
+        </div>
+      </Spin>
     </div>
   )
 }

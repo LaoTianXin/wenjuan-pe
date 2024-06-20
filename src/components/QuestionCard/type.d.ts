@@ -1,5 +1,5 @@
 declare namespace QuestionCard {
-  export interface QuestionProp {
+  export interface QuestionDataProp {
     _id: string
     title: string
     isPublished: boolean

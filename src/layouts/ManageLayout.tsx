@@ -3,6 +3,8 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { PathNameEnum } from '../router/pathNameEnum'
 import { PlusOutlined, BarsOutlined, StarOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Button, Space } from 'antd'
+import { createQuestion } from '../api'
+import { useRequest } from 'ahooks'
 
 const manageList = [
   {
@@ -24,11 +26,28 @@ const manageList = [
 const ManageLayout: FC = () => {
   const nav = useNavigate()
   const { pathname } = useLocation()
+
+  const { loading, run: handleAddQuestion } = useRequest(createQuestion, {
+    manual: true,
+    onSuccess: data => {
+      const { _id } = data || {}
+      if (_id) {
+        nav(`${PathNameEnum.QUESTION_EDIT}/${_id}`)
+      }
+    },
+  })
   return (
     <div className="container flex p-8">
       <div className="w-[120px]">
         <Space direction="vertical">
-          <Button className="mb-5" type="primary" size="large" icon={<PlusOutlined />}>
+          <Button
+            onClick={() => handleAddQuestion()}
+            className="mb-5"
+            type="primary"
+            size="large"
+            loading={loading}
+            icon={<PlusOutlined />}
+          >
             新增问卷
           </Button>
           {manageList.map(item => (
@@ -44,7 +63,6 @@ const ManageLayout: FC = () => {
           ))}
         </Space>
       </div>
-
       <div className="flex-1 ml-[60px]">
         <Outlet />
       </div>

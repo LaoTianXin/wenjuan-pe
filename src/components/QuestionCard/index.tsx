@@ -12,7 +12,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { PathNameEnum } from '../../router/pathNameEnum'
 
 const { confirm } = Modal
-const QuestionCard: FC<QuestionCard.QuestionProp> = ({
+const QuestionCard: FC<QuestionCard.QuestionDataProp> = ({
   title,
   isPublished,
   answerCount,

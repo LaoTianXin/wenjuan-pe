@@ -1,26 +1,16 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import QuestionCard from '../../components/QuestionCard'
 import { useTitle } from 'ahooks'
-import { Typography, Empty } from 'antd'
+import { Typography, Empty, Spin } from 'antd'
 import ListSearch from '../../components/ListSearch'
+import { useLoadQuestionListData } from '../../hooks/useLoadQuestionListData'
 
 const { Title } = Typography
-const questionListRaw: List.QuestionProp[] = Array(4)
-  .fill(null)
-  .map((_, index) => {
-    return {
-      _id: Math.random().toString().slice(3, 8),
-      title: '问卷' + (index + 1),
-      isPublished: Math.random() > 0.5,
-      isStar: Math.random() > 0.5,
-      answerCount: Math.floor(Math.random() * 100),
-      createAt: new Date().toLocaleString(),
-    }
-  })
 
 const List: FC = () => {
   useTitle('问卷调查 - 问卷列表')
-  const [questionList, setQuestionList] = useState(questionListRaw)
+  const { data, loading, error } = useLoadQuestionListData()
+  const { list: questionList = [], total = 0 } = data || {}
   return (
     <div className="m-5">
       <header className="flex mb-3">
@@ -31,13 +21,15 @@ const List: FC = () => {
           <ListSearch></ListSearch>
         </div>
       </header>
-      <div>
-        {!questionList || questionList.length === 0 ? (
-          <Empty description={'暂无问卷'}></Empty>
-        ) : (
-          questionList.map(q => <QuestionCard key={q._id} {...q} />)
-        )}
-      </div>
+      <Spin spinning={loading} tip={'加载中...'} size={'large'}>
+        <div className="min-h-[500px]">
+          {!loading && (!questionList || questionList.length === 0) ? (
+            <Empty description={'暂无问卷'}></Empty>
+          ) : (
+            questionList.map(q => <QuestionCard key={q._id} {...q} />)
+          )}
+        </div>
+      </Spin>
     </div>
   )
 }

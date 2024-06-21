@@ -1,12 +1,10 @@
 import React, { ChangeEvent, FC, useState, useEffect } from 'react'
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { Input } from 'antd'
-import { SearchKeyEnum } from '../enum/SearchKeyEnum'
+import { SearchKeyEnum } from '../enum/SearchEnum'
 const ListSearch: FC = () => {
   const [searchValue, setSearchValue] = useState<string>('')
-  const nav = useNavigate()
-  const { pathname } = useLocation()
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   useEffect(() => {
     const searchValue = searchParams.get(SearchKeyEnum.KEYWORDS) || ''
@@ -18,10 +16,9 @@ const ListSearch: FC = () => {
   }
 
   const handleSearch = (value: string) => {
-    nav({
-      pathname,
-      search: value ? `${SearchKeyEnum.KEYWORDS}=${value}` : '',
-    })
+    const searchParams = new URLSearchParams()
+    searchParams.set(SearchKeyEnum.KEYWORDS, value)
+    setSearchParams(searchParams)
   }
 
   return (

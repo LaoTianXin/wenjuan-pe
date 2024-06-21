@@ -5,7 +5,7 @@ declare interface Pages<T> {
 
 declare interface SearchOptions {
   keywords: string
-  pages: number
+  page: number
   pageSize: number
 }
 

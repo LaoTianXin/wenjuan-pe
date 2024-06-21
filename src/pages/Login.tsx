@@ -3,7 +3,7 @@ import { Card, Typography, Space, Form, Input, Button, Checkbox } from 'antd'
 import { LoginOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import { PathNameEnum } from '../router/pathNameEnum'
-import { StorageKeyEnum } from '../enum/StorageKeyEnum'
+import { StorageKeyEnum } from '../enum/StorageEnum'
 
 const rememberUserInfo = (username: string, password: string) => {
   localStorage.setItem(StorageKeyEnum.USERNAME, username)

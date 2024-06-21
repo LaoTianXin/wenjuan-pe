@@ -37,7 +37,7 @@ const ManageLayout: FC = () => {
     },
   })
   return (
-    <div className="container flex p-8">
+    <div className="container flex p-8 pb-0">
       <div className="w-[120px]">
         <Space direction="vertical">
           <Button

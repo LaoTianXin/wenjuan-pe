@@ -37,7 +37,7 @@ const QuestionCard: FC<QuestionCard.QuestionDataProp> = ({
     })
   }
   return (
-    <div className="px-3 mb-5 transition-all duration-300 bg-white rounded-lg hover:shadow-md">
+    <div className="px-3 mb-5 transition-all duration-300 bg-white rounded-lg last:mb-0 hover:shadow-md">
       <div className="flex items-center justify-between pt-3 ">
         <Link
           to={

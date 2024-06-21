@@ -10,11 +10,11 @@ import {
   TableColumnsType,
   Modal,
   message,
-  Spin,
 } from 'antd'
 import { DeleteOutlined, RestOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { useLoadQuestionListData } from '../../hooks/useLoadQuestionListData'
 import ListSearch from '../../components/ListSearch'
+import ListPage from '../../components/ListPage'
 
 const { Title } = Typography
 const { confirm } = Modal
@@ -84,10 +84,12 @@ const Trash: FC = () => {
           type: 'checkbox',
           onChange: onRowSelectChange,
         }}
+        loading={loading}
+        scroll={{ y: 420 }}
         dataSource={questionList}
         columns={columns}
         pagination={false}
-        rowKey={q => q._id}
+        rowKey="_id"
       ></Table>
     </>
   )
@@ -103,15 +105,12 @@ const Trash: FC = () => {
         </div>
       </header>
 
-      <Spin spinning={loading} tip={'加载中...'} size={'large'}>
-        <div className="min-h-[500px] m-10">
-          {!loading && (!questionList || questionList.length === 0) ? (
-            <Empty description={'暂无回收问卷'}></Empty>
-          ) : (
-            TableElement
-          )}
-        </div>
-      </Spin>
+      <div className="min-h-[500px] m-10">
+        {!questionList || questionList.length === 0
+          ? !loading && <Empty description={'暂无回收问卷'}></Empty>
+          : TableElement}
+      </div>
+      <ListPage total={total}></ListPage>
     </div>
   )
 }

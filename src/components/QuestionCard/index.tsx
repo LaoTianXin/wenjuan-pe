@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { Button, Space, Tag, Divider, Popconfirm, message, Modal } from 'antd'
 import {
   EditFilled,
@@ -9,22 +9,59 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons'
 import { useNavigate, Link } from 'react-router-dom'
+import { useRequest } from 'ahooks'
 import { PathNameEnum } from '../../router/pathNameEnum'
+import { updateQuestionService, duplicateQuestionService } from '../../api'
 
 const { confirm } = Modal
-const QuestionCard: FC<QuestionCard.QuestionDataProp> = ({
+const QuestionCard: FC<QuestionCard.QuestionTable> = ({
   title,
   isPublished,
   answerCount,
   createAt,
   isStar,
+  isDeleted,
   _id,
 }) => {
   const nav = useNavigate()
 
-  const handleCopy = () => {
-    message.success('复制成功')
-  }
+  const [isStarState, setIsStarState] = useState(isStar)
+  const [isDeletedState, setIsDeletedState] = useState(isDeleted)
+
+  //  改变星标状态
+  const { run: updateStarState, loading: starLoading } = useRequest(
+    () => updateQuestionService(_id, { isStar: !isStarState }),
+    {
+      manual: true,
+      onSuccess() {
+        setIsStarState(!isStarState)
+        message.success('修改成功')
+      },
+    }
+  )
+
+  // 复制问卷
+  const { run: duplicateQuestionItem, loading: duplicateLoading } = useRequest(
+    () => duplicateQuestionService(_id),
+    {
+      manual: true,
+      onSuccess({ _id }) {
+        nav(PathNameEnum.QUESTION_EDIT + `/${_id}`)
+      },
+    }
+  )
+
+  // 删除问卷
+  const { run: deleteQuestion, loading: deleteLoading } = useRequest(
+    () => updateQuestionService(_id, { isDeleted: true }),
+    {
+      manual: true,
+      onSuccess() {
+        setIsDeletedState(true)
+        message.success('删除成功')
+      },
+    }
+  )
 
   const handleDelete = () => {
     confirm({
@@ -32,10 +69,13 @@ const QuestionCard: FC<QuestionCard.QuestionDataProp> = ({
       cancelText: '取消',
       okText: '确定',
       onOk() {
-        message.success('删除成功')
+        deleteQuestion()
       },
     })
   }
+
+  if (isDeletedState) return null
+
   return (
     <div className="px-3 mb-5 transition-all duration-300 bg-white rounded-lg last:mb-0 hover:shadow-md">
       <div className="flex items-center justify-between pt-3 ">
@@ -47,7 +87,7 @@ const QuestionCard: FC<QuestionCard.QuestionDataProp> = ({
           }
         >
           <Space>
-            {isStar && <StarFilled className="text-red-500"></StarFilled>}
+            {isStarState && <StarFilled className="text-red-500"></StarFilled>}
             {title}
           </Space>
         </Link>
@@ -86,23 +126,36 @@ const QuestionCard: FC<QuestionCard.QuestionDataProp> = ({
           <Button
             type="text"
             size="small"
+            loading={starLoading}
+            onClick={() => updateStarState()}
             icon={
-              isStar ? (
+              isStarState ? (
                 <StarFilled className="text-red-500"></StarFilled>
               ) : (
                 <StarOutlined className="text-red-500"></StarOutlined>
               )
             }
           >
-            {isStar ? '取消标星' : '标星'}
+            {isStarState ? '取消标星' : '标星'}
           </Button>
-          <Popconfirm cancelText="取消" okText="确定" title="确认复制" onConfirm={handleCopy}>
-            <Button type="text" size="small" icon={<CopyOutlined></CopyOutlined>}>
+          <Popconfirm
+            cancelText="取消"
+            okText="确定"
+            title="确认复制"
+            onConfirm={() => duplicateQuestionItem()}
+          >
+            <Button
+              loading={duplicateLoading}
+              type="text"
+              size="small"
+              icon={<CopyOutlined></CopyOutlined>}
+            >
               复制
             </Button>
           </Popconfirm>
 
           <Button
+            loading={deleteLoading}
             onClick={() => handleDelete()}
             type="text"
             size="small"

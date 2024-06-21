@@ -1,9 +1,12 @@
 import React, { FC, useEffect } from 'react'
-import { Card, Typography, Space, Form, Input, Button, Checkbox } from 'antd'
+import { Card, Typography, Space, Form, Input, Button, Checkbox, message } from 'antd'
 import { LoginOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { useRequest } from 'ahooks'
+import { Link, useNavigate } from 'react-router-dom'
 import { PathNameEnum } from '../router/pathNameEnum'
 import { StorageKeyEnum } from '../enum/StorageEnum'
+import { userLoginService } from '../api'
+import { setToken } from '../utils/user-token'
 
 const rememberUserInfo = (username: string, password: string) => {
   localStorage.setItem(StorageKeyEnum.USERNAME, username)
@@ -28,6 +31,7 @@ const Login: FC = () => {
     remember: boolean
   }
 
+  const nav = useNavigate()
   const [form] = Form.useForm<FormData>()
 
   useEffect(() => {
@@ -38,10 +42,20 @@ const Login: FC = () => {
     })
   }, [])
 
-  const onFinish = (formData: FormData) => {
-    console.log(formData)
-    const { remember, username, password } = formData
+  const { run: userLogin, loading } = useRequest(userLoginService, {
+    manual: true,
+    onSuccess(res) {
+      if (res.token) {
+        setToken(res.token)
+        message.success('登录成功')
+        nav(PathNameEnum.HOME)
+      }
+    },
+  })
 
+  const onFinish = (formData: FormData) => {
+    const { remember, username, password } = formData
+    userLogin({ username, password })
     if (remember) {
       rememberUserInfo(username, password)
     } else {
@@ -50,7 +64,13 @@ const Login: FC = () => {
   }
 
   const FormElement = (
-    <Form form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} onFinish={onFinish}>
+    <Form
+      className="min-h-[220px]"
+      form={form}
+      labelCol={{ span: 6 }}
+      wrapperCol={{ span: 16 }}
+      onFinish={onFinish}
+    >
       <Form.Item
         rules={[
           {
@@ -97,8 +117,8 @@ const Login: FC = () => {
 
       <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
         <Space>
-          <Button type="primary" htmlType="submit">
-            注册
+          <Button loading={loading} type="primary" htmlType="submit">
+            登录
           </Button>
           <Link to={PathNameEnum.REGISTER}>去注册</Link>
         </Space>

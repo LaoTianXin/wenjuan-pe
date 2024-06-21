@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
-import { Card, Typography, Space, Form, Input, Button } from 'antd'
+import { Card, Typography, Space, Form, Input, Button, message } from 'antd'
+import { useRequest } from 'ahooks'
 import { UserAddOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { PathNameEnum } from '../router/pathNameEnum'
+import { userRegisterService } from '../api'
 const Register: FC = () => {
   interface FormData {
     username: string
@@ -11,12 +13,30 @@ const Register: FC = () => {
     confirmPassword: string
   }
 
+  const nav = useNavigate()
+
+  const { run: userRegister, loading } = useRequest(userRegisterService, {
+    manual: true,
+    onSuccess() {
+      message.success('注册成功')
+      // 跳转到登录页面
+      nav(PathNameEnum.LOGIN)
+    },
+  })
+
   const onFinish = (formData: FormData) => {
-    console.log(formData)
+    const { username, nickname, password, confirmPassword } = formData
+    if (password !== confirmPassword) return
+    userRegister({ username, nickname, password })
   }
 
   const FormElement = (
-    <Form labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} onFinish={onFinish}>
+    <Form
+      className="min-h-[280px]"
+      labelCol={{ span: 6 }}
+      wrapperCol={{ span: 16 }}
+      onFinish={onFinish}
+    >
       <Form.Item
         rules={[
           {
@@ -105,7 +125,7 @@ const Register: FC = () => {
 
       <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
         <Space>
-          <Button type="primary" htmlType="submit">
+          <Button loading={loading} type="primary" htmlType="submit">
             注册
           </Button>
           <Link to={PathNameEnum.LOGIN}>已注册，登录</Link>

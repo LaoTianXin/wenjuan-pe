@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom'
 import { useRequest } from 'ahooks'
-import { getQuestionById } from '../api'
+import { getQuestionByIdService } from '../api'
 
 export const useLoadQuestionData = () => {
   const { id = '' } = useParams()
-  return useRequest(() => getQuestionById(id))
+  return useRequest(() => getQuestionByIdService(id))
 }

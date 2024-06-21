@@ -2,12 +2,12 @@ import { useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useRequest } from 'ahooks'
 import { SearchKeyEnum, DefaultSearchParams } from '../enum/SearchEnum'
-import { getQuestionList } from '../api'
+import { getQuestionListService } from '../api'
 
 export const useLoadQuestionListData = ({
   isDeleted,
   isStar,
-}: Omit<Question.QuestionServerProp, 'keywords'> = {}) => {
+}: Omit<Question.QuestionListProp, 'keywords'> = {}) => {
   const [searchParams] = useSearchParams()
   const containerRef = useRef<HTMLDivElement>(null)
   const request = useRequest(
@@ -19,7 +19,7 @@ export const useLoadQuestionListData = ({
       if (containerRef.current) {
         containerRef.current.scrollTop = 0
       }
-      return getQuestionList({ keywords, isDeleted, isStar, page, pageSize })
+      return getQuestionListService({ keywords, isDeleted, isStar, page, pageSize })
     },
     { refreshDeps: [searchParams] }
   )

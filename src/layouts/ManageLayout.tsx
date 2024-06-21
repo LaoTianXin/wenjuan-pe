@@ -3,7 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { PathNameEnum } from '../router/pathNameEnum'
 import { PlusOutlined, BarsOutlined, StarOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Button, Space } from 'antd'
-import { createQuestion } from '../api'
+import { createQuestionService } from '../api'
 import { useRequest } from 'ahooks'
 
 const manageList = [
@@ -23,11 +23,12 @@ const manageList = [
     icon: <DeleteOutlined />,
   },
 ]
+
 const ManageLayout: FC = () => {
   const nav = useNavigate()
   const { pathname } = useLocation()
 
-  const { loading, run: handleAddQuestion } = useRequest(createQuestion, {
+  const { loading, run: handleAddQuestion } = useRequest(createQuestionService, {
     manual: true,
     onSuccess: data => {
       const { _id } = data || {}

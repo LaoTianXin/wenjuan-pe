@@ -1,6 +1,7 @@
 import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, Canceler } from 'axios'
 import { message } from 'antd'
+import { getToken } from '../utils/user-token'
 
 class AxiosRequest {
   private instance: AxiosInstance
@@ -51,6 +52,10 @@ class AxiosRequest {
     // 请求拦截器
     this.instance.interceptors.request.use(
       config => {
+        const token = getToken()
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`
+        }
         // 移除相同请求
         this.removeReq(config)
         // 添加新请求
@@ -65,15 +70,12 @@ class AxiosRequest {
       res => {
         // 请求成功后移除请求
         this.removeReq(res.config)
-
-        const { errno, data, msg } = res.data
+        const responseData: BaseResponseType = res.data || {}
+        const { errno, data, msg } = responseData
         if (errno !== 0) {
           message.error(msg)
           return Promise.reject(msg)
         } else {
-          if (res.config.method === 'post') {
-            message.success('新增成功')
-          }
           return Promise.resolve(data)
         }
       },
@@ -101,6 +103,11 @@ class AxiosRequest {
   // 对外接口: put请求
   public put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
     return this.instance.put<T>(url, data, config) as Promise<T>
+  }
+
+  // 对外接口: patch请求
+  public patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return this.instance.patch<T>(url, data, config) as Promise<T>
   }
 
   // 对外接口: delete请求

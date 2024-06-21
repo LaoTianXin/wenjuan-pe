@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import QuestionCard from '../../components/QuestionCard'
 import { useTitle } from 'ahooks'
-import { Typography, Empty, Spin } from 'antd'
+import { Typography, Spin } from 'antd'
 import { useLoadQuestionListData } from '../../hooks/useLoadQuestionListData'
 import ListSearch from '../../components/ListSearch'
 import ListPage from '../../components/ListPage'
@@ -24,9 +24,9 @@ const Star: FC = () => {
       </header>
       <Spin spinning={loading} tip={'加载中...'} size={'large'}>
         <div ref={containerRef} className="h-[calc(100vh-65px-65px-180px)] overflow-y-scroll mb-5">
-          {!questionList || questionList.length === 0
-            ? !loading && <Empty description={'暂无星标问卷'}></Empty>
-            : questionList.map(q => <QuestionCard key={q._id} {...q} />)}
+          {questionList &&
+            questionList.length > 0 &&
+            questionList.map(q => <QuestionCard key={q._id} {...q} />)}
         </div>
       </Spin>
       <ListPage total={total}></ListPage>

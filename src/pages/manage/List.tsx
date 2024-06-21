@@ -3,7 +3,7 @@ import QuestionCard from '../../components/QuestionCard'
 import { useTitle, useInViewport, useRequest, useDebounceFn } from 'ahooks'
 import { Typography, Empty, Spin } from 'antd'
 import ListSearch from '../../components/ListSearch'
-import { getQuestionList } from '../../api'
+import { getQuestionListService } from '../../api'
 import { useSearchParams } from 'react-router-dom'
 import { SearchKeyEnum, DefaultSearchParams } from '../../enum/SearchEnum'
 
@@ -13,7 +13,7 @@ const List: FC = () => {
   useTitle('问卷调查 - 问卷列表')
 
   const [started, setStarted] = useState(false)
-  const [questionList, setQuestionList] = useState<Question.QuestionDataProp[]>([])
+  const [questionList, setQuestionList] = useState<Question.QuestionTable[]>([])
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(0)
   const [total, setTotal] = useState(0)
@@ -23,14 +23,17 @@ const List: FC = () => {
 
   const keywords = searchParams.get(SearchKeyEnum.KEYWORDS) || undefined
 
-  const { loading, run: load } = useRequest(() => getQuestionList({ page, pageSize, keywords }), {
-    manual: true,
-    onSuccess({ list, total }) {
-      setQuestionList(questionList.concat(list))
-      setTotal(total)
-      setPage(page + 1)
-    },
-  })
+  const { loading, run: load } = useRequest(
+    () => getQuestionListService({ page, pageSize, keywords }),
+    {
+      manual: true,
+      onSuccess({ list, total }) {
+        setQuestionList(questionList.concat(list))
+        setTotal(total)
+        setPage(page + 1)
+      },
+    }
+  )
 
   const moreRef = useRef<HTMLDivElement>(null)
   const [inViewport] = useInViewport(moreRef)
@@ -79,7 +82,9 @@ const List: FC = () => {
       </header>
 
       <div className="h-[calc(100vh-65px-65px-160px)] overflow-y-scroll">
-        {questionList && questionList.map(q => <QuestionCard key={q._id} {...q} />)}
+        {questionList &&
+          questionList.length > 0 &&
+          questionList.map(q => <QuestionCard key={q._id} {...q} />)}
 
         <div ref={moreRef} className="mb-2 text-base text-center ">
           {loadMore}

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { useTitle } from 'ahooks'
+import { useTitle, useRequest } from 'ahooks'
 import {
   Typography,
   Empty,
@@ -10,16 +10,18 @@ import {
   TableColumnsType,
   Modal,
   message,
+  Spin,
 } from 'antd'
 import { DeleteOutlined, RestOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { useLoadQuestionListData } from '../../hooks/useLoadQuestionListData'
 import ListSearch from '../../components/ListSearch'
 import ListPage from '../../components/ListPage'
+import { updateQuestionService, deleteQuestionListService } from '../../api'
 
 const { Title } = Typography
 const { confirm } = Modal
 
-const columns: TableColumnsType<Question.QuestionDataProp> = [
+const columns: TableColumnsType<Question.QuestionTable> = [
   {
     title: '问卷标题',
     dataIndex: 'title',
@@ -44,9 +46,43 @@ const columns: TableColumnsType<Question.QuestionDataProp> = [
 
 const Trash: FC = () => {
   useTitle('问卷调查 - 回收站')
-  const { data, loading, error } = useLoadQuestionListData({ isDeleted: true })
+  const { data, loading, error, refresh } = useLoadQuestionListData({ isDeleted: true })
   const { list: questionList = [], total } = data || {}
   const [selectIds, setSelectIds] = useState<React.Key[]>([])
+
+  const { run: restoreQuestion, loading: restoreLoading } = useRequest(
+    // 同时恢复
+    () => Promise.all(selectIds.map(id => updateQuestionService(String(id), { isDeleted: false }))),
+    // 挨个删恢复
+    // async () => {
+    //   for await (const id of selectIds) {
+    //     await updateQuestionService(String(id), { isDeleted: false })
+    //   }
+    // },
+    {
+      manual: true,
+      onSuccess() {
+        message.success('恢复成功')
+        handleReset()
+      },
+    }
+  )
+
+  const { run: deleteQuestions, loading: deleteLoading } = useRequest(
+    () => deleteQuestionListService(selectIds.map(id => String(id))),
+    {
+      manual: true,
+      onSuccess() {
+        message.success('删除成功')
+        handleReset()
+      },
+    }
+  )
+
+  const handleReset = () => {
+    setSelectIds([])
+    refresh()
+  }
 
   const onRowSelectChange = (selectedRowKeys: React.Key[]) => {
     setSelectIds(selectedRowKeys)
@@ -59,7 +95,7 @@ const Trash: FC = () => {
       title: '确定彻底删除选中的问卷吗?',
       icon: <ExclamationCircleOutlined />,
       onOk: () => {
-        message.success('删除成功')
+        deleteQuestions()
       },
     })
   }
@@ -67,13 +103,20 @@ const Trash: FC = () => {
   const TableElement: JSX.Element = (
     <>
       <Space className="mb-6">
-        <Button icon={<RestOutlined />} disabled={selectIds.length === 0} type="primary">
+        <Button
+          loading={restoreLoading}
+          icon={<RestOutlined />}
+          disabled={selectIds.length === 0 || deleteLoading}
+          type="primary"
+          onClick={() => restoreQuestion()}
+        >
           恢复
         </Button>
         <Button
+          loading={deleteLoading}
           icon={<DeleteOutlined />}
           onClick={() => handleDelete()}
-          disabled={selectIds.length === 0}
+          disabled={selectIds.length === 0 || restoreLoading}
           danger
         >
           彻底删除
@@ -106,9 +149,13 @@ const Trash: FC = () => {
       </header>
 
       <div className="min-h-[500px] m-10">
-        {!questionList || questionList.length === 0
-          ? !loading && <Empty description={'暂无回收问卷'}></Empty>
-          : TableElement}
+        {!questionList || questionList.length === 0 ? (
+          <Spin spinning={loading}>
+            <Empty description={'暂无回收问卷'}></Empty>
+          </Spin>
+        ) : (
+          TableElement
+        )}
       </div>
       <ListPage total={total}></ListPage>
     </div>

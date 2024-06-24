@@ -21,7 +21,7 @@ import { updateQuestionService, deleteQuestionListService } from '../../api'
 const { Title } = Typography
 const { confirm } = Modal
 
-const columns: TableColumnsType<Question.QuestionTable> = [
+const columns: TableColumnsType<QuestionServer.QuestionTable> = [
   {
     title: '问卷标题',
     dataIndex: 'title',

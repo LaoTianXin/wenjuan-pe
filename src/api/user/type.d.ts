@@ -1,4 +1,4 @@
-declare namespace User {
+declare namespace UserServer {
   export interface UserInfoTable {
     readonly createAt: string
     nickname: string

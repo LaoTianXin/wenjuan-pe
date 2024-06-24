@@ -13,7 +13,7 @@ const List: FC = () => {
   useTitle('问卷调查 - 问卷列表')
 
   const [started, setStarted] = useState(false)
-  const [questionList, setQuestionList] = useState<Question.QuestionTable[]>([])
+  const [questionList, setQuestionList] = useState<QuestionServer.QuestionTable[]>([])
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(0)
   const [total, setTotal] = useState(0)

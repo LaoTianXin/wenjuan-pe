@@ -1,4 +1,4 @@
-declare namespace Question {
+declare namespace QuestionServer {
   export interface QuestionTable {
     readonly _id: id
     readonly answerCount: number

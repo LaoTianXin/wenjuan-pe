@@ -7,7 +7,7 @@ import { getQuestionListService } from '../api'
 export const useLoadQuestionListData = ({
   isDeleted,
   isStar,
-}: Omit<Question.QuestionListProp, 'keywords'> = {}) => {
+}: Omit<QuestionServer.QuestionListProp, 'keywords'> = {}) => {
   const [searchParams] = useSearchParams()
   const containerRef = useRef<HTMLDivElement>(null)
   const request = useRequest(

@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { PathNameEnum } from '../router/pathNameEnum'
 import { PlusOutlined, BarsOutlined, StarOutlined, DeleteOutlined } from '@ant-design/icons'
-import { Button, Space } from 'antd'
+import { Button, Space, message } from 'antd'
 import { createQuestionService } from '../api'
 import { useRequest } from 'ahooks'
 
@@ -33,6 +33,7 @@ const ManageLayout: FC = () => {
     onSuccess: data => {
       const { _id } = data || {}
       if (_id) {
+        message.success('创建成功')
         nav(`${PathNameEnum.QUESTION_EDIT}/${_id}`)
       }
     },

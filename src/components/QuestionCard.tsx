@@ -10,11 +10,11 @@ import {
 } from '@ant-design/icons'
 import { useNavigate, Link } from 'react-router-dom'
 import { useRequest } from 'ahooks'
-import { PathNameEnum } from '../../router/pathNameEnum'
-import { updateQuestionService, duplicateQuestionService } from '../../api'
+import { PathNameEnum } from '../router/pathNameEnum'
+import { updateQuestionService, duplicateQuestionService } from '../api'
 
 const { confirm } = Modal
-const QuestionCard: FC<QuestionCard.QuestionTable> = ({
+const QuestionCard: FC<QuestionComponent.QuestionTable> = ({
   title,
   isPublished,
   answerCount,

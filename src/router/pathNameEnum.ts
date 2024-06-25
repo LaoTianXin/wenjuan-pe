@@ -9,3 +9,7 @@ export enum PathNameEnum {
   QUESTION_STAT = '/question/stat',
   QUESTION_EDIT = '/question/edit',
 }
+
+export const whiteRouteList = [PathNameEnum.LOGIN, PathNameEnum.REGISTER, PathNameEnum.HOME]
+
+export const blackRouteList = [PathNameEnum.LOGIN, PathNameEnum.REGISTER]

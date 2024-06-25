@@ -1,22 +1,21 @@
 import React from 'react'
-import { Space, Typography, Button } from 'antd'
+import { useDispatch } from 'react-redux'
+import { logoutReducer } from '../store/user'
+import { Space, Typography, Button, message } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-import { useRequest } from 'ahooks'
 import { Link, useNavigate } from 'react-router-dom'
 import { PathNameEnum } from '../router/pathNameEnum'
-import { userInfoService } from '../api'
-import { removeToken, getToken } from '../utils/user-token'
+import { useGetUserInfo } from '@/hooks/useGetUserInfo'
 
 const { Title } = Typography
 
 const UserInfo: React.FC = () => {
   const nav = useNavigate()
-
-  const { data } = useRequest(userInfoService)
-  const { username, nickname } = data || {}
-  const token = getToken()
+  const dispatch = useDispatch()
+  const { username, nickname } = useGetUserInfo()
   const loginOut = () => {
-    removeToken()
+    dispatch(logoutReducer())
+    message.success('退出成功')
     nav(PathNameEnum.LOGIN)
   }
 
@@ -47,7 +46,7 @@ const UserInfo: React.FC = () => {
     </Link>
   )
 
-  return <>{token && username ? UserInfo : Login}</>
+  return <>{username ? UserInfo : Login}</>
 }
 
 export default UserInfo

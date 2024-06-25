@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, Canceler } from 'axios'
 import { message } from 'antd'
-import { getToken } from '../utils/user-token'
+import store from '@/store'
 
 class AxiosRequest {
   private instance: AxiosInstance
@@ -52,7 +52,7 @@ class AxiosRequest {
     // 请求拦截器
     this.instance.interceptors.request.use(
       config => {
-        const token = getToken()
+        const token = store.getState()?.user?.token
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }

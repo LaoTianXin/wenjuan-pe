@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { Card, Typography, Space, Form, Input, Button, Checkbox, message } from 'antd'
 import { LoginOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
@@ -6,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { PathNameEnum } from '../router/pathNameEnum'
 import { StorageKeyEnum } from '../enum/StorageEnum'
 import { userLoginService } from '../api'
+import { loginReducer } from '@/store/user'
 import { setToken } from '../utils/user-token'
 
 const rememberUserInfo = (username: string, password: string) => {
@@ -32,6 +34,7 @@ const Login: FC = () => {
   }
 
   const nav = useNavigate()
+  const dispatch = useDispatch()
   const [form] = Form.useForm<FormData>()
 
   useEffect(() => {
@@ -46,7 +49,7 @@ const Login: FC = () => {
     manual: true,
     onSuccess(res) {
       if (res.token) {
-        setToken(res.token)
+        dispatch(loginReducer({ token: res.token }))
         message.success('登录成功')
         nav(PathNameEnum.HOME)
       }

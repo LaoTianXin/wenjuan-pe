@@ -6,11 +6,7 @@ import { PathNameEnum } from '../router/pathNameEnum'
 const { Title, Paragraph } = Typography
 const Home: FC = () => {
   useEffect(() => {
-    fetch('/api/test')
-      .then(res => res.json())
-      .then(res => {
-        console.log('🚀 ~ useEffect ~ res:', res)
-      })
+    console.log('loading')
   }, [])
 
   const nav = useNavigate()

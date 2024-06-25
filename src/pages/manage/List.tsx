@@ -21,7 +21,7 @@ const List: FC = () => {
 
   const isHaveMore = total > questionList.length
 
-  const keywords = searchParams.get(SearchKeyEnum.KEYWORDS) || undefined
+  const keywords = searchParams.get(SearchKeyEnum.KEYWORDS) || void 0
 
   const { loading, run: load } = useRequest(
     () => getQuestionListService({ page, pageSize, keywords }),

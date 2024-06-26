@@ -8,7 +8,6 @@ import { PathNameEnum } from '../router/pathNameEnum'
 import { StorageKeyEnum } from '../enum/StorageEnum'
 import { userLoginService } from '../api'
 import { loginReducer } from '@/store/user'
-import { setToken } from '../utils/user-token'
 
 const rememberUserInfo = (username: string, password: string) => {
   localStorage.setItem(StorageKeyEnum.USERNAME, username)

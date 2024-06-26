@@ -8,10 +8,9 @@ const QuestionLayout: FC = () => {
   const { waiting } = useLoadUserData()
   useNavPage(waiting)
   return (
-    <>
-      <div>QuestionLayout</div>
-      <div>{waiting ? <Spin size="large"></Spin> : <Outlet />}</div>
-    </>
+    <div className="h-[100vh]">
+      {waiting ? <Spin className="mx-auto my-[300px] w-full" size="large"></Spin> : <Outlet />}
+    </div>
   )
 }
 

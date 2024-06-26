@@ -10,7 +10,7 @@ export interface UserState {
 const initialState: UserState = {
   username: '',
   nickname: '',
-  token: getToken() || '',
+  token: getToken(),
 }
 
 const userSlice = createSlice({
@@ -19,7 +19,6 @@ const userSlice = createSlice({
   reducers: {
     loginReducer(state, action: PayloadAction<Pick<UserState, 'token'>>) {
       setToken(action.payload.token)
-
       return Object.assign(state, action.payload)
     },
 

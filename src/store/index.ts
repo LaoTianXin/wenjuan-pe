@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { useStore } from 'react-redux'
 import user, { UserState } from './user'
 
 export interface RootState {

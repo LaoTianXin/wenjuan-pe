@@ -8,13 +8,12 @@ body {
 
     /* 自定义滚动条轨道 */
     ::-webkit-scrollbar-track {
-        background-color: #f1f1f1;
+        background-color: transparent;
     }
 
     /* 自定义滚动条的滑块 */
     ::-webkit-scrollbar-thumb {
-        /* background-color: #888; */
-        background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+        background-color: #ccc;
         border-radius: 8px;
     }
 

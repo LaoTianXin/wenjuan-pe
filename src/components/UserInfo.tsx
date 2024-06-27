@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { logoutReducer } from '../store/user'
+import { logoutReducer } from '../store/userReducer'
 import { Space, Typography, Button, message } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import { Link, useNavigate } from 'react-router-dom'

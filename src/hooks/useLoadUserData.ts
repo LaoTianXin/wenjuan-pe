@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks'
 import { userInfoService } from '../api'
 import { useGetUserInfo } from './useGetUserInfo'
 import { useDispatch } from 'react-redux'
-import { setUserInfoReducer } from '@/store/user'
+import { setUserInfoReducer } from '@/store/userReducer'
 
 export const useLoadUserData = () => {
   const [waiting, setWaiting] = useState(true)

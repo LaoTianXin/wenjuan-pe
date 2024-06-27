@@ -1,4 +1,11 @@
 declare namespace QuestionServer {
+  interface ComponentType {
+    fe_id: string
+    type: string
+    title: string
+    props: Record<string, string>
+  }
+
   export interface QuestionTable {
     readonly _id: id
     readonly answerCount: number
@@ -7,6 +14,7 @@ declare namespace QuestionServer {
     isPublished: boolean
     isStar: boolean
     isDeleted: boolean
+    componentList: ComponentType[]
   }
 
   export type id = string

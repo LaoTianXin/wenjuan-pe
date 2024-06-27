@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { PathNameEnum } from '../router/pathNameEnum'
 import { StorageKeyEnum } from '../enum/StorageEnum'
 import { userLoginService } from '../api'
-import { loginReducer } from '@/store/user'
+import { loginReducer } from '@/store/userReducer'
 
 const rememberUserInfo = (username: string, password: string) => {
   localStorage.setItem(StorageKeyEnum.USERNAME, username)

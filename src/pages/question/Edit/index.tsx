@@ -1,9 +1,17 @@
 import React, { FC } from 'react'
+import { useDispatch } from 'react-redux'
+import { setSelectComponentId } from '@/store/componentsReducer'
 import { useLoadQuestionData } from '@/hooks/useLoadQuestionData'
 import EditCanvas from './EditCanvas'
 
 const Edit: FC = () => {
-  const { loading, data } = useLoadQuestionData()
+  const dispatch = useDispatch()
+  const { loading } = useLoadQuestionData()
+
+  const handleCancelSelectId = () => {
+    dispatch(setSelectComponentId(''))
+  }
+
   return (
     <div
       className="h-[100vh] flex flex-col"
@@ -16,10 +24,13 @@ const Edit: FC = () => {
 
       <div className="flex flex-auto py-[20px] px-[30px] ">
         <div className="w-[400px] bg-white rounded-2xl shadow-xl"></div>
-        <div className="flex items-center justify-center flex-1">
+        <div
+          className="flex items-center justify-center flex-1"
+          onClick={() => handleCancelSelectId()}
+        >
           <div className="w-[400px] h-[650px]  overflow-hidden rounded-3xl bg-white shadow-xl py-4">
             <div className="h-full overflow-auto">
-              <EditCanvas></EditCanvas>
+              <EditCanvas loading={loading}></EditCanvas>
             </div>
           </div>
         </div>

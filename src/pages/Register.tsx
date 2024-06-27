@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Card, Typography, Space, Form, Input, Button, message } from 'antd'
+import { Typography, Space, Form, Input, Button, message } from 'antd'
 import { useRequest } from 'ahooks'
 import { UserAddOutlined } from '@ant-design/icons'
 import { Link, useNavigate } from 'react-router-dom'
@@ -31,12 +31,7 @@ const Register: FC = () => {
   }
 
   const FormElement = (
-    <Form
-      className="min-h-[280px]"
-      labelCol={{ span: 6 }}
-      wrapperCol={{ span: 16 }}
-      onFinish={onFinish}
-    >
+    <Form labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} onFinish={onFinish}>
       <Form.Item
         rules={[
           {
@@ -91,7 +86,7 @@ const Register: FC = () => {
           },
           {
             pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-            message: '密码至少8位，包含大小写字母和数字',
+            message: '密码至少8位大小写字母数字',
           },
         ]}
         name="password"
@@ -139,7 +134,7 @@ const Register: FC = () => {
       style={{ backgroundImage: 'linear-gradient(to top, #fff1eb 0%, #ace0f9 100%)' }}
       className="flex min-h-[calc(100vh-65px-65px)] items-center justify-center"
     >
-      <Card>
+      <div className="w-[350px] h-[400px] bg-white rounded-xl p-5 flex flex-col justify-center items-center">
         <Space direction="vertical" align="center" size="large">
           <Space>
             <Typography.Title level={3}>
@@ -149,7 +144,7 @@ const Register: FC = () => {
           </Space>
           {FormElement}
         </Space>
-      </Card>
+      </div>
     </div>
   )
 }

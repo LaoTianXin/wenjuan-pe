@@ -10,7 +10,7 @@ interface EditCanvasPropsType {
   loading?: boolean
 }
 
-const getComponent = ({ type, props }: ComponentInfoType) => {
+const getComponent = ({ type, props = {} }: ComponentInfoType) => {
   const config = getComponentConfigByType(type)
   if (!config) return null
   const { Component } = config

@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks'
 import { userInfoService } from '../api'
 import { useGetUserInfo } from './useGetUserInfo'
 import { useDispatch } from 'react-redux'
-import { setUserInfoReducer } from '@/store/userReducer'
+import { setUserInfoReducer, logoutReducer } from '@/store/userReducer'
 
 export const useLoadUserData = () => {
   const [waiting, setWaiting] = useState(true)
@@ -15,6 +15,9 @@ export const useLoadUserData = () => {
     onSuccess(res) {
       const { nickname, username } = res
       dispatch(setUserInfoReducer({ nickname, username }))
+    },
+    onError() {
+      dispatch(logoutReducer())
     },
     onFinally() {
       setWaiting(false)

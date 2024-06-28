@@ -3,6 +3,9 @@ import { useDispatch } from 'react-redux'
 import { setSelectComponentId } from '@/store/componentsReducer'
 import { useLoadQuestionData } from '@/hooks/useLoadQuestionData'
 import EditCanvas from './EditCanvas'
+import EditLeftPanel from './EditLeftPanel'
+import EditRightPanel from './EditRightPanel'
+import EditHeader from './EditHeader'
 
 const Edit: FC = () => {
   const dispatch = useDispatch()
@@ -20,10 +23,14 @@ const Edit: FC = () => {
           'linear-gradient(to top, #d5d4d0 0%, #d5d4d0 1%, #eeeeec 31%, #efeeec 75%, #e9e9e7 100%)',
       }}
     >
-      <div className="h-[60px] bg-white rounded-b-lg shadow-lg">Header</div>
+      <div className="h-[60px] bg-white rounded-b-lg shadow-lg">
+        <EditHeader></EditHeader>
+      </div>
 
       <div className="flex flex-auto py-[20px] px-[30px] ">
-        <div className="w-[400px] bg-white rounded-2xl shadow-xl"></div>
+        <div className="w-[400px] bg-white rounded-2xl shadow-xl px-5 py-2">
+          <EditLeftPanel></EditLeftPanel>
+        </div>
         <div
           className="flex items-center justify-center flex-1"
           onClick={() => handleCancelSelectId()}
@@ -34,7 +41,9 @@ const Edit: FC = () => {
             </div>
           </div>
         </div>
-        <div className="w-[400px] bg-white rounded-2xl shadow-xl"></div>
+        <div className="w-[400px] bg-white rounded-2xl shadow-xl px-5 py-2">
+          <EditRightPanel></EditRightPanel>
+        </div>
       </div>
     </div>
   )

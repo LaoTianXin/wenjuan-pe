@@ -13,3 +13,7 @@ type ReadonlyKeys<T> = {
 
 declare type PickReadonly<T> = Pick<T, ReadonlyKeys<T>>
 declare type PickWritable<T> = Pick<T, WritableKeys<T>>
+
+declare type CommonAttributes<T, R> = {
+  [K in Extract<keyof T, keyof R>]: T[K] & R[K]
+}

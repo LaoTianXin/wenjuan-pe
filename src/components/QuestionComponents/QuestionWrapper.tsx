@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 interface QuestionWrapperPropsType {
   onClick?: (e: MouseEvent) => void
-  isSelect: boolean
+  isSelect?: boolean
 }
 
 const QuestionWrapper: FC<PropsWithChildren<QuestionWrapperPropsType>> = ({

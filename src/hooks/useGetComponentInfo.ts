@@ -6,5 +6,7 @@ export const useGetComponentInfo = () => {
     (state: RootState) => state.components
   )
 
-  return { componentList, selectComponentId }
+  const selectComponentInfo = componentList.find(item => item.fe_id === selectComponentId) || null
+
+  return { componentList, selectComponentId, selectComponentInfo }
 }

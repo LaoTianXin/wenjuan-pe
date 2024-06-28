@@ -5,7 +5,7 @@ import { Typography } from 'antd'
 const { Title } = Typography
 
 const QuestionTitle: FC<Partial<QuestionTitlePropsType>> = prop => {
-  const { title, level, isCenter } = Object.assign(defaultQuestionTitleProps, prop)
+  const { title, level, isCenter } = { ...defaultQuestionTitleProps, ...prop }
 
   const getTitleFontSize = (level: number) => {
     if (level === 1) return '24px'

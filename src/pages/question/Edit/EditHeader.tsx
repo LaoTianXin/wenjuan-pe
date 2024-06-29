@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { Button, Space, Typography } from 'antd'
 import { LeftOutlined, SaveOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import EditToolkit from './EditToolkit'
 
 const { Title } = Typography
 
@@ -22,7 +23,9 @@ const EditHeader: FC = () => {
         </Space>
       </div>
 
-      <div className="flex items-center justify-center flex-1">中间部分</div>
+      <div className="flex items-center justify-center flex-1">
+        <EditToolkit></EditToolkit>
+      </div>
 
       <div>
         <Space>

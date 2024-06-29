@@ -10,10 +10,11 @@ export interface CreatePropComponentPropsType {
 
 export interface PublicProps {
   onChange: (prop: ComponentPropsType) => void
+  locked: boolean
 }
 
 export const createPropComponent = (componentConfig: CreatePropComponentPropsType[]) => {
-  const PropComponent = (prop: ComponentPropsType & PublicProps) => {
+  const PropComponent = ({ onChange, locked, ...prop }: ComponentPropsType & PublicProps) => {
     const [form] = Form.useForm()
     useEffect(() => {
       form.setFieldsValue(prop)
@@ -21,11 +22,17 @@ export const createPropComponent = (componentConfig: CreatePropComponentPropsTyp
 
     const handleFormChange = () => {
       const props = form.getFieldsValue()
-      prop.onChange(props)
+      onChange(props)
     }
 
     return (
-      <Form layout="vertical" initialValues={prop} onFieldsChange={handleFormChange} form={form}>
+      <Form
+        disabled={locked}
+        layout="vertical"
+        initialValues={prop}
+        onFieldsChange={handleFormChange}
+        form={form}
+      >
         {componentConfig.map(({ render, required, formItemProps = {} }, index) => {
           return (
             <Form.Item

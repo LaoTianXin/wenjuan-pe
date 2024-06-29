@@ -3,6 +3,9 @@
         "antd",
         "Appstore",
         "craco",
-        "Popconfirm"
+        "downarrow",
+        "immer",
+        "Popconfirm",
+        "uparrow"
     ]
 }

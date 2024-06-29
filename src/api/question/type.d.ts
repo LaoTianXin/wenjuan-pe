@@ -4,6 +4,8 @@ declare namespace QuestionServer {
     type: string
     title: string
     props: Record<string, string>
+    hidden: boolean
+    locked: boolean
   }
 
   export interface QuestionTable {

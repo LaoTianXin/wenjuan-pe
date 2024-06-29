@@ -12,7 +12,7 @@ const ComponentProps: FC = () => {
   const { selectComponentInfo } = useGetComponentInfo()
   if (selectComponentInfo === null) return NoneProps
 
-  const { type, props, fe_id } = selectComponentInfo
+  const { type, props, fe_id, locked } = selectComponentInfo
   const componentConfig = getComponentConfigByType(type)
   if (componentConfig === null) return NoneProps
 
@@ -24,7 +24,7 @@ const ComponentProps: FC = () => {
 
   return (
     <div>
-      <PropComponent {...props} onChange={handlePropChange}></PropComponent>
+      <PropComponent {...props} onChange={handlePropChange} locked={locked}></PropComponent>
     </div>
   )
 }

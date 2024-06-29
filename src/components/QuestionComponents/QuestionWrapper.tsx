@@ -4,22 +4,25 @@ import classNames from 'classnames'
 interface QuestionWrapperPropsType {
   onClick?: (e: MouseEvent) => void
   isSelect?: boolean
+  locked?: boolean
 }
 
 const QuestionWrapper: FC<PropsWithChildren<QuestionWrapperPropsType>> = ({
   children,
   onClick,
   isSelect = false,
+  locked = false,
 }) => {
   const wrapperClass = classNames([
     'p-3',
     'm-3',
     'transition',
     'border-2',
-    isSelect ? 'border-[#1fb202]' : 'border-white',
     'rounded',
     'cursor-pointer',
+    isSelect ? 'border-[#1fb202]' : 'border-white',
     { 'hover:border-gray-200': !isSelect },
+    { 'opacity-50 cursor-not-allowed select-none': locked },
   ])
 
   return (

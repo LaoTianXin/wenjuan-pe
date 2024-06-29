@@ -20,7 +20,7 @@ const getComponent = ({ type, props = {} }: ComponentInfoType) => {
 const EditCanvas: FC<EditCanvasPropsType> = ({ loading = false }) => {
   const dispatch = useDispatch()
 
-  const { componentList, selectComponentId } = useGetComponentInfo()
+  const { showComponentList, selectComponentId } = useGetComponentInfo()
 
   const handleComponentClick = (e: MouseEvent, id: string) => {
     e.stopPropagation()
@@ -37,14 +37,16 @@ const EditCanvas: FC<EditCanvasPropsType> = ({ loading = false }) => {
 
   return (
     <div className="min-h-full overflow-hidden">
-      {componentList.map(componentInfo => {
+      {showComponentList.map(componentInfo => {
         const Component = getComponent(componentInfo)
+        const { locked, fe_id } = componentInfo
         return (
           Component && (
             <QuestionWrapper
-              isSelect={selectComponentId === componentInfo.fe_id}
-              onClick={e => handleComponentClick(e, componentInfo.fe_id)}
-              key={componentInfo.fe_id}
+              isSelect={selectComponentId === fe_id}
+              locked={locked}
+              onClick={e => handleComponentClick(e, fe_id)}
+              key={fe_id}
             >
               {Component}
             </QuestionWrapper>

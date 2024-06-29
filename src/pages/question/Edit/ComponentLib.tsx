@@ -33,6 +33,8 @@ const getComponentItemRender = (
       title,
       type,
       props: defaultProps,
+      hidden: false,
+      locked: false,
     }
     dispatch(addComponent(componentInfo))
   }

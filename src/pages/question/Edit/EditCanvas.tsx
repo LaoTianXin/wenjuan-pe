@@ -1,5 +1,5 @@
 import React, { FC, MouseEvent } from 'react'
-import { Spin } from 'antd'
+import { Spin, Typography } from 'antd'
 import { useDispatch } from 'react-redux'
 import { getComponentConfigByType } from '@/components/QuestionComponents'
 import { ComponentInfoType, setSelectComponentId } from '@/store/componentsReducer'
@@ -35,24 +35,32 @@ const EditCanvas: FC<EditCanvasPropsType> = ({ loading = false }) => {
     )
   }
 
+  const NoneComponent = (
+    <div className="flex items-center justify-center h-full">
+      <Typography.Text>暂无组件</Typography.Text>
+    </div>
+  )
+
+  const ShowComponentElement = showComponentList.map(componentInfo => {
+    const Component = getComponent(componentInfo)
+    const { locked, fe_id } = componentInfo
+    return (
+      Component && (
+        <QuestionWrapper
+          isSelect={selectComponentId === fe_id}
+          locked={locked}
+          onClick={e => handleComponentClick(e, fe_id)}
+          key={fe_id}
+        >
+          {Component}
+        </QuestionWrapper>
+      )
+    )
+  })
+
   return (
     <div className="min-h-full overflow-hidden">
-      {showComponentList.map(componentInfo => {
-        const Component = getComponent(componentInfo)
-        const { locked, fe_id } = componentInfo
-        return (
-          Component && (
-            <QuestionWrapper
-              isSelect={selectComponentId === fe_id}
-              locked={locked}
-              onClick={e => handleComponentClick(e, fe_id)}
-              key={fe_id}
-            >
-              {Component}
-            </QuestionWrapper>
-          )
-        )
-      })}
+      {showComponentList.length === 0 ? NoneComponent : ShowComponentElement}
     </div>
   )
 }

@@ -5,7 +5,7 @@ import { ComponentPropsType } from '@/components/QuestionComponents'
 import {
   getComponentInfo,
   getComponentIndexById,
-  getComponentHiddenNextSelectId,
+  getComponentNextSelectId,
   insertComponent,
 } from './utils'
 import { cloneDeep } from 'lodash-es'
@@ -68,6 +68,8 @@ const componentsSlice = createSlice({
     deleteComponent: produce((draft: ComponentsState) => {
       const index = getComponentIndexById(draft)
       if (index >= 0) {
+        const nextSelectId = getComponentNextSelectId(draft, draft.selectComponentId)
+        draft.selectComponentId = nextSelectId
         draft.componentList.splice(index, 1)
         message.success('删除成功')
       }
@@ -80,7 +82,7 @@ const componentsSlice = createSlice({
       const { fe_id = draft.selectComponentId, hidden } = action.payload
 
       const selectComponentInfo = getComponentInfo(draft, fe_id)
-      const nextSelectId = getComponentHiddenNextSelectId(draft, fe_id)
+      const nextSelectId = getComponentNextSelectId(draft, fe_id)
       draft.selectComponentId = nextSelectId
       if (selectComponentInfo) {
         selectComponentInfo.hidden = hidden

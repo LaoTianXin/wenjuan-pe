@@ -14,7 +14,7 @@ export const getComponentIndexById = (draft: ComponentsState, id?: string) => {
   return draft.componentList.findIndex(item => item.fe_id === id)
 }
 
-export const getComponentHiddenNextSelectId = (draft: ComponentsState, id?: string) => {
+export const getComponentNextSelectId = (draft: ComponentsState, id?: string) => {
   id ??= draft.selectComponentId
   const showComponentList = getShowComponentList(draft)
   const index = showComponentList.findIndex(item => item.fe_id === id)

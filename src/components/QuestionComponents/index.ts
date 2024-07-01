@@ -1,20 +1,32 @@
 import { FC } from 'react'
 import QuestionInputConfig, { QuestionInputPropsType } from './QuestionInput'
 import QuestionTitleConfig, { QuestionTitlePropsType } from './QuestionTitle'
-import { PublicProps } from './createPropComponent'
+import QuestionParagraphConfig, { QuestionParagraphPropsType } from './QuestionParagraph'
+import QuestionInfoConfig, { QuestionInfoPropsType } from './QuestionInfo'
+import QuestionTextAreaConfig, { QuestionTextAreaPropsType } from './QuestionTextArea'
+import QuestionRadioConfig, { QuestionRadioPropsType } from './QuestionRadio'
+import QuestionCheckboxConfig, { QuestionCheckboxPropsType } from './QuestionCheckbox'
+import { PublicProps } from './utilComponent/createPropComponent'
+type defaultPropsType =
+  | QuestionInputPropsType
+  | QuestionTitlePropsType
+  | QuestionParagraphPropsType
+  | QuestionInfoPropsType
+  | QuestionTextAreaPropsType
+  | QuestionRadioPropsType
+  | QuestionCheckboxPropsType
 
-type defaultPropsType = QuestionInputPropsType | QuestionTitlePropsType
 export type ComponentPropsType = Partial<defaultPropsType>
 
 type Group = 'QuestionFormGroup' | 'QuestionTitleGroup'
 
-export type ComponentConfigType = {
+export type ComponentConfigType<T extends defaultPropsType = any> = {
   title: string
   type: string
-  Component: FC<ComponentPropsType>
-  defaultProps: defaultPropsType
+  Component: FC<Partial<T>>
+  defaultProps: T
   group: Group
-  PropComponent: FC<ComponentPropsType & PublicProps>
+  PropComponent: FC<Partial<T> & PublicProps>
 }
 
 export type ComponentConfigGroupType = {
@@ -23,7 +35,15 @@ export type ComponentConfigGroupType = {
   componentConfigList: ComponentConfigType[]
 }
 
-const componentsConfigList: ComponentConfigType[] = [QuestionInputConfig, QuestionTitleConfig]
+const componentsConfigList: ComponentConfigType[] = [
+  QuestionInputConfig,
+  QuestionTitleConfig,
+  QuestionParagraphConfig,
+  QuestionInfoConfig,
+  QuestionTextAreaConfig,
+  QuestionRadioConfig,
+  QuestionCheckboxConfig,
+]
 
 export const getComponentConfigByType = (type: string) => {
   return componentsConfigList.find(item => item.type === type) || null

@@ -1,13 +1,8 @@
 import React from 'react'
 import { Input, Select, Checkbox } from 'antd'
-import Component from './Component'
-import { defaultQuestionTitleProps } from './interface'
-import { ComponentConfigType } from '../index'
-import { CreatePropComponentPropsType, createPropComponent } from '../createPropComponent'
+import { PropComponentConfigType, createPropComponent } from '../utilComponent/createPropComponent'
 
-export * from './interface'
-
-const propComponentList: CreatePropComponentPropsType[] = [
+const propComponentList: PropComponentConfigType = () => [
   {
     formItemProps: {
       label: '标题内容',
@@ -40,13 +35,4 @@ const propComponentList: CreatePropComponentPropsType[] = [
   },
 ]
 
-const componentConfig: ComponentConfigType = {
-  title: '标题',
-  type: 'QuestionTitle',
-  Component,
-  defaultProps: defaultQuestionTitleProps,
-  group: 'QuestionTitleGroup',
-  PropComponent: createPropComponent(propComponentList),
-}
-
-export default componentConfig
+export default createPropComponent(propComponentList)

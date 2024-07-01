@@ -1,15 +1,15 @@
 import Component from './Component'
-import { defaultQuestionInputProps } from './interface'
+import { defaultQuestionTextAreaProps } from './interface'
 import { ComponentConfigType } from '../index'
 import PropComponent from './PropComponent'
 
 export * from './interface'
 
 const componentConfig: ComponentConfigType = {
-  title: '输入框',
-  type: 'QuestionInput',
+  title: '文本域',
+  type: 'QuestionTextArea',
   Component,
-  defaultProps: defaultQuestionInputProps,
+  defaultProps: defaultQuestionTextAreaProps,
   group: 'QuestionFormGroup',
   PropComponent,
 }

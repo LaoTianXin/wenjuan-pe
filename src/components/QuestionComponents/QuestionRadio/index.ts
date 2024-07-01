@@ -1,16 +1,16 @@
 import Component from './Component'
-import { defaultQuestionInputProps } from './interface'
+import { defaultQuestionRadioProps } from './interface'
 import { ComponentConfigType } from '../index'
 import PropComponent from './PropComponent'
 
 export * from './interface'
 
 const componentConfig: ComponentConfigType = {
-  title: '输入框',
-  type: 'QuestionInput',
-  Component,
-  defaultProps: defaultQuestionInputProps,
+  title: '单选',
+  type: 'QuestionRadio',
+  defaultProps: defaultQuestionRadioProps,
   group: 'QuestionFormGroup',
+  Component,
   PropComponent,
 }
 

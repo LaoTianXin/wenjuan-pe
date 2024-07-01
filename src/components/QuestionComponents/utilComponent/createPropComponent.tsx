@@ -1,21 +1,29 @@
 import React, { ReactNode, useEffect } from 'react'
-import { Form, FormItemProps } from 'antd'
-import { ComponentPropsType } from './index'
+import { Form, FormInstance, FormItemProps } from 'antd'
+import { ComponentPropsType } from '../index'
 
-export interface CreatePropComponentPropsType {
+export interface ComponentRenderProps {
   render: ReactNode
   required?: boolean
-  formItemProps?: FormItemProps
+  formItemProps?: FormItemProps<ComponentPropsType>
 }
 
-export interface PublicProps {
-  onChange: (prop: ComponentPropsType) => void
+export interface PublicProps<T extends ComponentPropsType = any> {
+  onChange: (prop: T) => void
   locked: boolean
 }
 
-export const createPropComponent = (componentConfig: CreatePropComponentPropsType[]) => {
-  const PropComponent = ({ onChange, locked, ...prop }: ComponentPropsType & PublicProps) => {
-    const [form] = Form.useForm()
+export type PropComponentConfigType<T extends ComponentPropsType = any> = (
+  componentConfig: T & { form?: FormInstance<T> }
+) => ComponentRenderProps[]
+
+export const createPropComponent = (componentConfig: PropComponentConfigType) => {
+  const PropComponent = ({
+    onChange,
+    locked,
+    ...prop
+  }: ComponentPropsType & PublicProps<ComponentPropsType>) => {
+    const [form] = Form.useForm<ComponentPropsType>()
     useEffect(() => {
       form.setFieldsValue(prop)
     }, [prop])
@@ -25,6 +33,8 @@ export const createPropComponent = (componentConfig: CreatePropComponentPropsTyp
       onChange(props)
     }
 
+    const componentRenderList = componentConfig({ form, ...prop })
+
     return (
       <Form
         disabled={locked}
@@ -33,7 +43,7 @@ export const createPropComponent = (componentConfig: CreatePropComponentPropsTyp
         onFieldsChange={handleFormChange}
         form={form}
       >
-        {componentConfig.map(({ render, required, formItemProps = {} }, index) => {
+        {componentRenderList.map(({ render, required, formItemProps = {} }, index) => {
           return (
             <Form.Item
               key={index}

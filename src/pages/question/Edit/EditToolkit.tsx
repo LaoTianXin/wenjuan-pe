@@ -34,7 +34,7 @@ const EditToolkit: FC = () => {
   }
 
   const handleToggleComponent = () => {
-    dispatch(toggleComponentLockedState())
+    dispatch(toggleComponentLockedState({ fe_id: selectComponentId }))
   }
 
   const handleCopyComponent = () => {

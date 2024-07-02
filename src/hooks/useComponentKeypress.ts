@@ -49,7 +49,7 @@ export const useComponentKeypress = () => {
     ['l', 'L'],
     safeHandleKeyPress(() => {
       if (!selectComponentId) return message.error('当前没有选中组件')
-      dispatch(toggleComponentLockedState())
+      dispatch(toggleComponentLockedState({ fe_id: selectComponentId }))
     })
   )
 

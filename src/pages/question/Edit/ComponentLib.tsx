@@ -58,11 +58,11 @@ const getComponentItemRender = (
 
 const ComponentLib: FC = () => {
   return (
-    <>
+    <div className="h-[720px] overflow-auto">
       {componentConfigGroupList.map((item, index) => {
         return getComponentItemRender(item, index)
       })}
-    </>
+    </div>
   )
 }
 

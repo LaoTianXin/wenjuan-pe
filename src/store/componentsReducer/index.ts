@@ -11,19 +11,19 @@ import {
 import { cloneDeep } from 'lodash-es'
 import { nanoid } from 'nanoid'
 
-export type ComponentInfoType = {
+export type ComponentInfoType<T extends ComponentPropsType = any> = {
   fe_id: string
   type: string
   title: string
-  props: ComponentPropsType
+  props: T
   hidden: boolean
   locked: boolean
 }
 
-export interface ComponentsState {
-  componentList: ComponentInfoType[]
+export interface ComponentsState<T extends ComponentPropsType = any> {
+  componentList: ComponentInfoType<T>[]
   selectComponentId: string
-  copyComponent: ComponentInfoType | null
+  copyComponent: ComponentInfoType<T> | null
 }
 
 const initialState: ComponentsState = {
@@ -75,60 +75,71 @@ const componentsSlice = createSlice({
       }
     }),
 
-    updateComponentHiddenState: (
-      draft: ComponentsState,
-      action: PayloadAction<{ fe_id?: string; hidden: boolean }>
-    ) => {
-      const { fe_id = draft.selectComponentId, hidden } = action.payload
+    updateComponentHiddenState: produce(
+      (draft: ComponentsState, action: PayloadAction<{ fe_id?: string; hidden: boolean }>) => {
+        const { fe_id = draft.selectComponentId, hidden } = action.payload
 
-      const selectComponentInfo = getComponentInfo(draft, fe_id)
-      const nextSelectId = getComponentNextSelectId(draft, fe_id)
-      draft.selectComponentId = nextSelectId
-      if (selectComponentInfo) {
-        selectComponentInfo.hidden = hidden
-        message.success('隐藏成功')
+        const selectComponentInfo = getComponentInfo(draft, fe_id)
+        const nextSelectId = getComponentNextSelectId(draft, fe_id)
+        draft.selectComponentId = nextSelectId
+        if (selectComponentInfo) {
+          selectComponentInfo.hidden = hidden
+          message.success(hidden ? '隐藏成功' : '取消隐藏成功')
+        }
       }
-    },
+    ),
 
-    toggleComponentLockedState: (draft: ComponentsState) => {
-      const selectComponentInfo = getComponentInfo(draft)
-      if (selectComponentInfo) {
-        selectComponentInfo.locked = !selectComponentInfo.locked
-        message.success('切换锁定状态成功')
+    toggleComponentLockedState: produce(
+      (draft: ComponentsState, action: PayloadAction<{ fe_id: string }>) => {
+        const selectComponentInfo = getComponentInfo(draft, action.payload.fe_id)
+        if (selectComponentInfo) {
+          selectComponentInfo.locked = !selectComponentInfo.locked
+          message.success('切换锁定状态成功')
+        }
       }
-    },
+    ),
 
-    copyComponentInfo: (draft: ComponentsState) => {
+    copyComponentInfo: produce((draft: ComponentsState) => {
       const selectComponentInfo = getComponentInfo(draft)
       if (selectComponentInfo) {
         const copyComponent = cloneDeep(selectComponentInfo)
         draft.copyComponent = copyComponent
         message.success('复制成功')
       }
-    },
+    }),
 
-    pasteComponentInfo: (draft: ComponentsState) => {
+    pasteComponentInfo: produce((draft: ComponentsState) => {
       const copyComponent = draft.copyComponent
       if (!copyComponent) return
       copyComponent.fe_id = nanoid(5)
 
       insertComponent(draft, copyComponent)
       message.success('粘贴成功')
-    },
+    }),
 
-    selectPrevComponent: (draft: ComponentsState) => {
+    selectPrevComponent: produce((draft: ComponentsState) => {
       const index = getComponentIndexById(draft)
       if (index > 0) {
         draft.selectComponentId = draft.componentList[index - 1].fe_id
       }
-    },
+    }),
 
-    selectNextComponent: (draft: ComponentsState) => {
+    selectNextComponent: produce((draft: ComponentsState) => {
       const index = getComponentIndexById(draft)
       if (index >= 0 && index < draft.componentList.length - 1) {
         draft.selectComponentId = draft.componentList[index + 1].fe_id
       }
-    },
+    }),
+
+    changeComponentTitle: produce(
+      (draft: ComponentsState, action: PayloadAction<{ fe_id: string; title: string }>) => {
+        const { fe_id, title } = action.payload
+        const componentInfo = getComponentInfo(draft, fe_id)
+        if (componentInfo) {
+          componentInfo.title = title
+        }
+      }
+    ),
   },
 })
 
@@ -144,6 +155,7 @@ export const {
   pasteComponentInfo,
   selectPrevComponent,
   selectNextComponent,
+  changeComponentTitle,
 } = componentsSlice.actions
 
 export default componentsSlice.reducer

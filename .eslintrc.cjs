@@ -21,5 +21,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     'prefer-const': 'off',
+    'react/prop-types': 'off',
   },
 }

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useRequest } from 'ahooks'
 import { useDispatch } from 'react-redux'
 import { resetComponentList, setSelectComponentId } from '@/store/componentsReducer'
+import { resetPageInfoReducer } from '@/store/pageInfoReducer'
 import { getQuestionByIdService } from '../api'
 
 export const useLoadQuestionData = () => {
@@ -20,11 +21,12 @@ export const useLoadQuestionData = () => {
   })
 
   useEffect(() => {
-    const { componentList = [] } = data || {}
+    const { componentList = [], title = '', desc = '', js = '', css = '' } = data || {}
     if (componentList.length) {
       const id = componentList[0].fe_id
       dispatch(setSelectComponentId(id))
     }
+    dispatch(resetPageInfoReducer({ title, desc, js, css }))
     dispatch(resetComponentList(componentList))
   }, [data])
 

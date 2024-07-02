@@ -13,6 +13,9 @@ declare namespace QuestionServer {
     readonly answerCount: number
     readonly createAt: string
     title: string
+    desc: string
+    js: string
+    css: string
     isPublished: boolean
     isStar: boolean
     isDeleted: boolean

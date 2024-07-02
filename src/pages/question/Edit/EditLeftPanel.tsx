@@ -2,6 +2,12 @@ import React, { FC } from 'react'
 import { Tabs, Space } from 'antd'
 import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons'
 import ComponentLib from './ComponentLib'
+import EditLayer from './EditLayer'
+
+enum EditLeftPanelKey {
+  ComponentLib = 'componentLib',
+  Layers = 'layers',
+}
 
 const items = [
   {
@@ -11,7 +17,7 @@ const items = [
         组件库
       </Space>
     ),
-    key: 'componentLib',
+    key: EditLeftPanelKey.ComponentLib,
     children: <ComponentLib></ComponentLib>,
   },
   {
@@ -21,13 +27,13 @@ const items = [
         图层
       </Space>
     ),
-    key: 'layers',
-    children: <div>图层</div>,
+    key: EditLeftPanelKey.Layers,
+    children: <EditLayer></EditLayer>,
   },
 ]
 
 const EditLeftPanel: FC = () => {
-  const defaultActiveKey = 'componentLib'
+  const defaultActiveKey = EditLeftPanelKey.ComponentLib
   return <Tabs defaultActiveKey={defaultActiveKey} items={items}></Tabs>
 }
 

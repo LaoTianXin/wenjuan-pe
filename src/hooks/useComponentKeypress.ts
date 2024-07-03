@@ -20,66 +20,49 @@ export const useComponentKeypress = () => {
     return document.activeElement === document.body
   }
 
-  const safeHandleKeyPress = (eventHandler: (event: KeyboardEvent, key: any) => void) => {
-    if (getActiveFocusElementIsBody()) {
-      return eventHandler
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      return (event: KeyboardEvent, key: any) => {}
-    }
-  }
+  useKeyPress(['delete', 'backspace', 'd', 'D'], () => {
+    if (!getActiveFocusElementIsBody()) return
+    if (!selectComponentId) return message.error('当前没有选中组件')
+    dispatch(deleteComponent())
+  })
 
-  useKeyPress(
-    ['delete', 'backspace', 'd', 'D'],
-    safeHandleKeyPress(() => {
-      if (!selectComponentId) return message.error('当前没有选中组件')
-      dispatch(deleteComponent())
-    })
-  )
+  useKeyPress(['h', 'H'], () => {
+    if (!getActiveFocusElementIsBody()) return
+    if (!selectComponentId) return message.error('当前没有选中组件')
+    dispatch(updateComponentHiddenState({ hidden: true }))
+  })
 
-  useKeyPress(
-    ['h', 'H'],
-    safeHandleKeyPress(() => {
-      if (!selectComponentId) return message.error('当前没有选中组件')
-      dispatch(updateComponentHiddenState({ hidden: true }))
-    })
-  )
+  useKeyPress(['l', 'L'], () => {
+    if (!getActiveFocusElementIsBody()) return
+    if (!selectComponentId) return message.error('当前没有选中组件')
+    dispatch(toggleComponentLockedState({ fe_id: selectComponentId }))
+  })
 
-  useKeyPress(
-    ['l', 'L'],
-    safeHandleKeyPress(() => {
-      if (!selectComponentId) return message.error('当前没有选中组件')
-      dispatch(toggleComponentLockedState({ fe_id: selectComponentId }))
-    })
-  )
+  useKeyPress(['ctrl.c', 'meta.c'], () => {
+    if (!getActiveFocusElementIsBody()) return
 
-  useKeyPress(
-    ['ctrl.c', 'meta.c'],
-    safeHandleKeyPress(() => {
-      if (!selectComponentId) return message.error('当前没有选中组件')
-      dispatch(copyComponentInfo())
-    })
-  )
+    if (!selectComponentId) return message.error('当前没有选中组件')
+    dispatch(copyComponentInfo())
+  })
 
-  useKeyPress(
-    ['ctrl.v', 'meta.v'],
-    safeHandleKeyPress(() => {
-      if (!copyComponent) return message.error('当前没有可粘贴组件')
-      dispatch(pasteComponentInfo())
-    })
-  )
+  useKeyPress(['ctrl.v', 'meta.v'], () => {
+    if (!getActiveFocusElementIsBody()) return
 
-  useKeyPress(
-    'uparrow',
-    safeHandleKeyPress(() => {
-      dispatch(selectPrevComponent())
-    })
-  )
+    if (!copyComponent) return message.error('当前没有可粘贴组件')
+    dispatch(pasteComponentInfo())
+  })
 
-  useKeyPress(
-    'downarrow',
-    safeHandleKeyPress(() => {
-      dispatch(selectNextComponent())
-    })
-  )
+  useKeyPress('uparrow', () => {
+    if (!getActiveFocusElementIsBody()) return
+    if (!selectComponentId) return message.error('当前没有选中组件')
+
+    dispatch(selectPrevComponent())
+  })
+
+  useKeyPress('downarrow', () => {
+    if (!getActiveFocusElementIsBody()) return
+    if (!selectComponentId) return message.error('当前没有选中组件')
+
+    dispatch(selectNextComponent())
+  })
 }

@@ -52,7 +52,8 @@ const LayerItem: FC<ComponentInfoType & { isSelect: boolean }> = ({
 
   const handleUpdateTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value.trim()
-    if (!showEditTitle) return
+    if (!showEditTitle) return message.error('组件标题不能为空')
+
     setEditTitle(text)
   }
 

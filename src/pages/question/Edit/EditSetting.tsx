@@ -1,4 +1,4 @@
-import { Form, Input, message } from 'antd'
+import { Form, Input } from 'antd'
 import React, { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { resetPageInfoReducer } from '@/store/pageInfoReducer'
@@ -16,7 +16,6 @@ const EditSetting: FC = () => {
 
   const handleFormValuesChange = () => {
     const values = form.getFieldsValue()
-    console.log('🚀 ~ handleFormValuesChange ~ values:', values)
     dispatch(resetPageInfoReducer(values))
   }
   return (

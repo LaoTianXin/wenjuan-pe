@@ -24,9 +24,10 @@ export const createPropComponent = (componentConfig: PropComponentConfigType) =>
     ...prop
   }: ComponentPropsType & PublicProps<ComponentPropsType>) => {
     const [form] = Form.useForm<ComponentPropsType>()
+
     useEffect(() => {
       form.setFieldsValue(prop)
-    }, [prop])
+    }, [...Object.values(prop)])
 
     const handleFormChange = () => {
       const props = form.getFieldsValue()

@@ -15,16 +15,14 @@ const SortableItem: React.FC<SortableItemProps> = ({ id, children }) => {
   useEffect(() => {
     if (ref.current) {
       const height = ref.current.getBoundingClientRect().height
-      console.log(height)
 
       setHeight(`${height}px`)
     }
   }, [])
 
   const style: React.CSSProperties = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition,
-    height,
   }
 
   return (

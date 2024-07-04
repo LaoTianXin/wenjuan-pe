@@ -8,6 +8,7 @@ import {
   getComponentNextSelectId,
   insertComponent,
 } from './utils'
+import { arrayMove } from '@dnd-kit/sortable'
 import { cloneDeep } from 'lodash-es'
 import { nanoid } from 'nanoid'
 
@@ -140,6 +141,14 @@ const componentsSlice = createSlice({
         }
       }
     ),
+
+    swapComponentList: produce(
+      (draft, action: PayloadAction<{ oldIndex: number; newIndex: number }>) => {
+        const { oldIndex, newIndex } = action.payload
+        const originComponentList = draft.componentList
+        draft.componentList = arrayMove(originComponentList, oldIndex, newIndex)
+      }
+    ),
   },
 })
 
@@ -156,6 +165,7 @@ export const {
   selectPrevComponent,
   selectNextComponent,
   changeComponentTitle,
+  swapComponentList,
 } = componentsSlice.actions
 
 export default componentsSlice.reducer

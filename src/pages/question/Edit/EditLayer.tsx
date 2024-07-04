@@ -7,10 +7,13 @@ import {
   updateComponentHiddenState,
   toggleComponentLockedState,
   changeComponentTitle,
+  swapComponentList,
 } from '@/store/componentsReducer'
 import { EyeOutlined, EyeInvisibleOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons'
 import { useGetComponentInfo } from '@/hooks/useGetComponentInfo'
 import { ComponentInfoType } from '@/store/componentsReducer'
+import SortableContainer from '@/components/Sortable/SortableContainer'
+import SortableItem from '@/components/Sortable/SortableItem'
 
 const LayerItem: FC<ComponentInfoType & { isSelect: boolean }> = ({
   fe_id,
@@ -92,18 +95,23 @@ const LayerItem: FC<ComponentInfoType & { isSelect: boolean }> = ({
 }
 
 const EditLayer: FC = () => {
+  const dispatch = useDispatch()
   const { selectComponentId, componentList } = useGetComponentInfo()
 
+  const componentListById = componentList.map(item => ({ ...item, id: item.fe_id }))
+
+  const handleDragEnd = (oldIndex: number, newIndex: number) => {
+    dispatch(swapComponentList({ oldIndex, newIndex }))
+  }
+
   return (
-    <div>
+    <SortableContainer items={componentListById} onDragEnd={handleDragEnd}>
       {componentList.map(props => (
-        <LayerItem
-          key={props.fe_id}
-          {...props}
-          isSelect={selectComponentId === props.fe_id}
-        ></LayerItem>
+        <SortableItem id={props.fe_id} key={props.fe_id}>
+          <LayerItem {...props} isSelect={selectComponentId === props.fe_id}></LayerItem>
+        </SortableItem>
       ))}
-    </div>
+    </SortableContainer>
   )
 }
 

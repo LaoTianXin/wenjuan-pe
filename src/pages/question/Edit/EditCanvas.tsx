@@ -2,9 +2,15 @@ import React, { FC, MouseEvent } from 'react'
 import { Spin, Typography } from 'antd'
 import { useDispatch } from 'react-redux'
 import { getComponentConfigByType } from '@/components/QuestionComponents'
-import { ComponentInfoType, setSelectComponentId } from '@/store/componentsReducer'
+import {
+  ComponentInfoType,
+  setSelectComponentId,
+  swapComponentList,
+} from '@/store/componentsReducer'
 import QuestionWrapper from '@/components/QuestionComponents/QuestionWrapper'
 import { useGetComponentInfo } from '@/hooks/useGetComponentInfo'
+import SortableContainer from '@/components/Sortable/SortableContainer'
+import SortableItem from '@/components/Sortable/SortableItem'
 
 interface EditCanvasPropsType {
   loading?: boolean
@@ -20,7 +26,7 @@ const getComponent = ({ type, props = {} }: ComponentInfoType) => {
 const EditCanvas: FC<EditCanvasPropsType> = ({ loading = false }) => {
   const dispatch = useDispatch()
 
-  const { showComponentList, selectComponentId } = useGetComponentInfo()
+  const { componentList, showComponentList, selectComponentId } = useGetComponentInfo()
 
   const handleComponentClick = (e: MouseEvent, id: string) => {
     e.stopPropagation()
@@ -46,22 +52,30 @@ const EditCanvas: FC<EditCanvasPropsType> = ({ loading = false }) => {
     const { locked, fe_id } = componentInfo
     return (
       Component && (
-        <QuestionWrapper
-          isSelect={selectComponentId === fe_id}
-          locked={locked}
-          onClick={e => handleComponentClick(e, fe_id)}
-          key={fe_id}
-        >
-          {Component}
-        </QuestionWrapper>
+        <SortableItem key={fe_id} id={fe_id}>
+          <QuestionWrapper
+            isSelect={selectComponentId === fe_id}
+            locked={locked}
+            onClick={e => handleComponentClick(e, fe_id)}
+          >
+            {Component}
+          </QuestionWrapper>
+        </SortableItem>
       )
     )
   })
+  const componentListById = componentList.map(item => ({ ...item, id: item.fe_id }))
+
+  const handleDragEnd = (oldIndex: number, newIndex: number) => {
+    dispatch(swapComponentList({ oldIndex, newIndex }))
+  }
 
   return (
-    <div className="min-h-full overflow-hidden">
-      {showComponentList.length === 0 ? NoneComponent : ShowComponentElement}
-    </div>
+    <SortableContainer items={componentListById} onDragEnd={handleDragEnd}>
+      <div className="min-h-full overflow-hidden">
+        {showComponentList.length === 0 ? NoneComponent : ShowComponentElement}
+      </div>
+    </SortableContainer>
   )
 }
 

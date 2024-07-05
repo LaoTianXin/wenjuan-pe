@@ -9,8 +9,11 @@ import {
   SnippetsOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
+  UndoOutlined,
+  RedoOutlined,
 } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
+import { ActionCreators } from 'redux-undo'
 import {
   deleteComponent,
   updateComponentHiddenState,
@@ -24,8 +27,10 @@ import { useComponentKeypress } from '@/hooks/useComponentKeypress'
 
 const EditToolkit: FC = () => {
   const dispatch = useDispatch()
-  const { selectComponentId, selectComponentInfo, copyComponent, showComponentList } =
+  const { selectComponentId, selectComponentInfo, copyComponent, showComponentList, future, past } =
     useGetComponentInfo()
+
+  useComponentKeypress()
 
   const selectIndex = showComponentList.findIndex(item => item.fe_id === selectComponentId)
 
@@ -61,6 +66,14 @@ const EditToolkit: FC = () => {
   const handleMoveDown = () => {
     if (isLast) return
     dispatch(swapComponentList({ oldIndex: selectIndex, newIndex: selectIndex + 1 }))
+  }
+
+  const handleUndo = () => {
+    dispatch(ActionCreators.undo())
+  }
+
+  const handleRedo = () => {
+    dispatch(ActionCreators.redo())
   }
 
   return (
@@ -126,6 +139,24 @@ const EditToolkit: FC = () => {
           disabled={!selectComponentId || isLast}
           shape="circle"
           icon={<ArrowDownOutlined />}
+        ></Button>
+      </Tooltip>
+
+      <Tooltip title="撤销">
+        <Button
+          disabled={past.length === 0}
+          onClick={() => handleUndo()}
+          shape="circle"
+          icon={<UndoOutlined />}
+        ></Button>
+      </Tooltip>
+
+      <Tooltip title="重做">
+        <Button
+          disabled={future.length === 0}
+          onClick={() => handleRedo()}
+          shape="circle"
+          icon={<RedoOutlined />}
         ></Button>
       </Tooltip>
     </Space>

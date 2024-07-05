@@ -22,5 +22,9 @@ body {
         width: 8px;
     }
 
+}
 
+
+div[role="button"] {
+    outline: none;
 }

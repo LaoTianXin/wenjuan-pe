@@ -8,11 +8,22 @@ export const useGetComponentInfo = <T extends ComponentPropsType = any>() => {
     componentList = [],
     selectComponentId = '',
     copyComponent,
-  } = useSelector((state: RootState) => state.components) as ComponentsState<T>
+  } = useSelector((state: RootState) => state.components.present) as ComponentsState<T>
+
+  const past = useSelector((state: RootState) => state.components.past)
+  const future = useSelector((state: RootState) => state.components.future)
 
   const selectComponentInfo = componentList.find(item => item.fe_id === selectComponentId) || null
 
   const showComponentList = componentList.filter(item => !item.hidden)
 
-  return { componentList, selectComponentId, selectComponentInfo, showComponentList, copyComponent }
+  return {
+    componentList,
+    selectComponentId,
+    selectComponentInfo,
+    showComponentList,
+    copyComponent,
+    past,
+    future,
+  }
 }

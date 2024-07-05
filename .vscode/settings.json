@@ -7,5 +7,6 @@
         "immer",
         "Popconfirm",
         "uparrow"
-    ]
+    ],
+    "common-intellisense.ui": []
 }

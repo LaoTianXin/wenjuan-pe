@@ -1,6 +1,7 @@
 import { message } from 'antd'
 import { useKeyPress } from 'ahooks'
 import { useDispatch } from 'react-redux'
+import { ActionCreators } from 'redux-undo'
 import {
   deleteComponent,
   updateComponentHiddenState,
@@ -14,10 +15,12 @@ import { useGetComponentInfo } from '@/hooks/useGetComponentInfo'
 
 export const useComponentKeypress = () => {
   const dispatch = useDispatch()
-  const { selectComponentId, copyComponent } = useGetComponentInfo()
+  const { selectComponentId, copyComponent, future, past } = useGetComponentInfo()
 
   const getActiveFocusElementIsBody = () => {
-    return document.activeElement === document.body
+    if (!document.activeElement) return false
+    const isActive = document.activeElement.matches('div[role="button"]')
+    return document.activeElement === document.body || isActive
   }
 
   useKeyPress(['delete', 'backspace', 'd', 'D'], () => {
@@ -65,4 +68,27 @@ export const useComponentKeypress = () => {
 
     dispatch(selectNextComponent())
   })
+
+  useKeyPress(
+    ['ctrl.z', 'meta.z'],
+    () => {
+      if (!getActiveFocusElementIsBody()) return
+      if (!past.length) return message.error('没有历史记录')
+
+      dispatch(ActionCreators.undo())
+    },
+    { exactMatch: true }
+  )
+
+  useKeyPress(
+    ['ctrl.y', 'meta.y', 'ctrl.shift.z', 'meta.shift.z'],
+
+    () => {
+      if (!getActiveFocusElementIsBody()) return
+      if (!future.length) return message.error('没有新增记录')
+
+      dispatch(ActionCreators.redo())
+    },
+    { exactMatch: true }
+  )
 }

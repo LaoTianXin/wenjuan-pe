@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { Button, Space, Typography, Input, message } from 'antd'
+import { Button, Space, Typography, Input, message, Modal } from 'antd'
 import { LeftOutlined, SaveOutlined, EditOutlined, CloudUploadOutlined } from '@ant-design/icons'
 import { useDebounceEffect, useRequest, useKeyPress } from 'ahooks'
 import { changePageTitle } from '@/store/pageInfoReducer'
@@ -11,6 +11,7 @@ import { useGetComponentInfo } from '@/hooks/useGetComponentInfo'
 import { updateQuestionService } from '@/api'
 
 const { Title } = Typography
+const { confirm } = Modal
 
 const EditTitle: FC = () => {
   const dispatch = useDispatch()
@@ -113,7 +114,16 @@ const EditButtons: FC = () => {
   }
 
   const handlePublish = () => {
-    publishQuestion({ isPublished: true })
+    confirm({
+      title: '确定要发布吗',
+      icon: <CloudUploadOutlined />,
+      content: '发布后将不可更改',
+      cancelText: '取消',
+      okText: '发布',
+      onOk() {
+        publishQuestion({ isPublished: true })
+      },
+    })
   }
   return (
     <Space>

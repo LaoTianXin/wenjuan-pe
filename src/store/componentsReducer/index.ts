@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { produce } from 'immer'
 import { message } from 'antd'
 import { ComponentPropsType } from '@/components/QuestionComponents'
 import {
@@ -37,118 +36,110 @@ const componentsSlice = createSlice({
   name: 'components',
   initialState,
   reducers: {
-    resetComponentList: produce(
-      (draft: ComponentsState, action: PayloadAction<ComponentInfoType[]>) => {
-        draft.componentList = action.payload
-      }
-    ),
+    resetComponentList: (state: ComponentsState, action: PayloadAction<ComponentInfoType[]>) => {
+      state.componentList = action.payload
+    },
+    setSelectComponentId: (state: ComponentsState, action: PayloadAction<string>) => {
+      state.selectComponentId = action.payload
+    },
 
-    setSelectComponentId: produce((draft: ComponentsState, action: PayloadAction<string>) => {
-      draft.selectComponentId = action.payload
-    }),
-
-    addComponent: produce((draft: ComponentsState, action: PayloadAction<ComponentInfoType>) => {
+    addComponent: (state: ComponentsState, action: PayloadAction<ComponentInfoType>) => {
       const newComponentInfo = action.payload
 
-      insertComponent(draft, newComponentInfo)
-    }),
+      insertComponent(state, newComponentInfo)
+    },
 
-    updateComponentProp: produce(
-      (
-        draft: ComponentsState,
-        action: PayloadAction<{ fe_id: string; props: ComponentPropsType }>
-      ) => {
-        const { fe_id, props } = action.payload
-        const componentInfo = getComponentInfo(draft, fe_id)
-        if (componentInfo) {
-          componentInfo.props = props
-        }
+    updateComponentProp: (
+      state: ComponentsState,
+      action: PayloadAction<{ fe_id: string; props: ComponentPropsType }>
+    ) => {
+      const { fe_id, props } = action.payload
+      const componentInfo = getComponentInfo(state, fe_id)
+      if (componentInfo) {
+        componentInfo.props = props
       }
-    ),
-
-    deleteComponent: produce((draft: ComponentsState) => {
-      const index = getComponentIndexById(draft)
+    },
+    deleteComponent: (state: ComponentsState) => {
+      const index = getComponentIndexById(state)
       if (index >= 0) {
-        const nextSelectId = getComponentNextSelectId(draft, draft.selectComponentId)
-        draft.selectComponentId = nextSelectId
-        draft.componentList.splice(index, 1)
+        const nextSelectId = getComponentNextSelectId(state, state.selectComponentId)
+        state.selectComponentId = nextSelectId
+        state.componentList.splice(index, 1)
         message.success('删除成功')
       }
-    }),
+    },
 
-    updateComponentHiddenState: produce(
-      (draft: ComponentsState, action: PayloadAction<{ fe_id?: string; hidden: boolean }>) => {
-        const { fe_id = draft.selectComponentId, hidden } = action.payload
+    updateComponentHiddenState: (
+      state: ComponentsState,
+      action: PayloadAction<{ fe_id?: string; hidden: boolean }>
+    ) => {
+      const { fe_id = state.selectComponentId, hidden } = action.payload
 
-        const selectComponentInfo = getComponentInfo(draft, fe_id)
-        const nextSelectId = getComponentNextSelectId(draft, fe_id)
-        draft.selectComponentId = nextSelectId
-        if (selectComponentInfo) {
-          selectComponentInfo.hidden = hidden
-          message.success(hidden ? '隐藏成功' : '取消隐藏成功')
-        }
+      const selectComponentInfo = getComponentInfo(state, fe_id)
+      const nextSelectId = getComponentNextSelectId(state, fe_id)
+      state.selectComponentId = nextSelectId
+      if (selectComponentInfo) {
+        selectComponentInfo.hidden = hidden
+        message.success(hidden ? '隐藏成功' : '取消隐藏成功')
       }
-    ),
-
-    toggleComponentLockedState: produce(
-      (draft: ComponentsState, action: PayloadAction<{ fe_id: string }>) => {
-        const selectComponentInfo = getComponentInfo(draft, action.payload.fe_id)
-        if (selectComponentInfo) {
-          selectComponentInfo.locked = !selectComponentInfo.locked
-          message.success('切换锁定状态成功')
-        }
+    },
+    toggleComponentLockedState: (
+      state: ComponentsState,
+      action: PayloadAction<{ fe_id: string }>
+    ) => {
+      const selectComponentInfo = getComponentInfo(state, action.payload.fe_id)
+      if (selectComponentInfo) {
+        selectComponentInfo.locked = !selectComponentInfo.locked
+        message.success('切换锁定状态成功')
       }
-    ),
-
-    copyComponentInfo: produce((draft: ComponentsState) => {
-      const selectComponentInfo = getComponentInfo(draft)
+    },
+    copyComponentInfo: (state: ComponentsState) => {
+      const selectComponentInfo = getComponentInfo(state)
       if (selectComponentInfo) {
         const copyComponent = cloneDeep(selectComponentInfo)
-        draft.copyComponent = copyComponent
+        state.copyComponent = copyComponent
         message.success('复制成功')
       }
-    }),
+    },
 
-    pasteComponentInfo: produce((draft: ComponentsState) => {
-      const copyComponent = draft.copyComponent
+    pasteComponentInfo: (state: ComponentsState) => {
+      const copyComponent = state.copyComponent
       if (!copyComponent) return
       copyComponent.fe_id = nanoid(5)
 
-      insertComponent(draft, copyComponent)
+      insertComponent(state, copyComponent)
       message.success('粘贴成功')
-    }),
+    },
 
-    selectPrevComponent: produce((draft: ComponentsState) => {
-      const index = getComponentIndexById(draft)
+    selectPrevComponent: (state: ComponentsState) => {
+      const index = getComponentIndexById(state)
       if (index > 0) {
-        draft.selectComponentId = draft.componentList[index - 1].fe_id
+        state.selectComponentId = state.componentList[index - 1].fe_id
       }
-    }),
+    },
 
-    selectNextComponent: produce((draft: ComponentsState) => {
-      const index = getComponentIndexById(draft)
-      if (index >= 0 && index < draft.componentList.length - 1) {
-        draft.selectComponentId = draft.componentList[index + 1].fe_id
+    selectNextComponent: (state: ComponentsState) => {
+      const index = getComponentIndexById(state)
+      if (index >= 0 && index < state.componentList.length - 1) {
+        state.selectComponentId = state.componentList[index + 1].fe_id
       }
-    }),
+    },
 
-    changeComponentTitle: produce(
-      (draft: ComponentsState, action: PayloadAction<{ fe_id: string; title: string }>) => {
-        const { fe_id, title } = action.payload
-        const componentInfo = getComponentInfo(draft, fe_id)
-        if (componentInfo) {
-          componentInfo.title = title
-        }
+    changeComponentTitle: (
+      state: ComponentsState,
+      action: PayloadAction<{ fe_id: string; title: string }>
+    ) => {
+      const { fe_id, title } = action.payload
+      const componentInfo = getComponentInfo(state, fe_id)
+      if (componentInfo) {
+        componentInfo.title = title
       }
-    ),
-
-    swapComponentList: produce(
-      (draft, action: PayloadAction<{ oldIndex: number; newIndex: number }>) => {
-        const { oldIndex, newIndex } = action.payload
-        const originComponentList = draft.componentList
-        draft.componentList = arrayMove(originComponentList, oldIndex, newIndex)
-      }
-    ),
+    },
+    swapComponentList: (state, action: PayloadAction<{ oldIndex: number; newIndex: number }>) => {
+      const { oldIndex, newIndex } = action.payload
+      const originComponentList = state.componentList
+      state.componentList = arrayMove(originComponentList, oldIndex, newIndex)
+    },
   },
 })
 

@@ -4,8 +4,8 @@
         "Appstore",
         "craco",
         "downarrow",
-        "immer",
         "Popconfirm",
+        "undoable",
         "uparrow"
     ],
     "common-intellisense.ui": []

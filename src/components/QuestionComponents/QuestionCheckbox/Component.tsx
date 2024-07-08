@@ -6,7 +6,6 @@ const { Paragraph } = Typography
 
 const QuestionCheckbox: FC<Partial<QuestionCheckboxPropsType>> = prop => {
   const { title, checkList = [], isVertical } = { ...defaultQuestionCheckboxProps, ...prop }
-  console.log('🚀 ~ checkList:', checkList)
   return (
     <div>
       <Paragraph strong>{title}</Paragraph>

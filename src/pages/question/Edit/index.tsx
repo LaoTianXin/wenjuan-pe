@@ -1,7 +1,9 @@
 import React, { FC } from 'react'
 import { useDispatch } from 'react-redux'
+import { useTitle } from 'ahooks'
 import { setSelectComponentId } from '@/store/componentsReducer'
 import { useLoadQuestionData } from '@/hooks/useLoadQuestionData'
+import { useGetPageInfo } from '@/hooks/useGetPageInfo'
 import EditCanvas from './EditCanvas'
 import EditLeftPanel from './EditLeftPanel'
 import EditRightPanel from './EditRightPanel'
@@ -10,6 +12,10 @@ import EditHeader from './EditHeader'
 const Edit: FC = () => {
   const dispatch = useDispatch()
   const { loading } = useLoadQuestionData()
+
+  const { title } = useGetPageInfo()
+
+  useTitle(`问卷编辑 - ${title}`)
 
   const handleCancelSelectId = () => {
     dispatch(setSelectComponentId(''))

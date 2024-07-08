@@ -9,7 +9,13 @@ const QuestionLayout: FC = () => {
   useNavPage(waiting)
   return (
     <div className="h-[100vh]">
-      {waiting ? <Spin className="mx-auto my-[300px] w-full" size="large"></Spin> : <Outlet />}
+      {waiting ? (
+        <Spin className="mx-auto my-[300px] w-full" size="large">
+          加载用户信息
+        </Spin>
+      ) : (
+        <Outlet />
+      )}
     </div>
   )
 }

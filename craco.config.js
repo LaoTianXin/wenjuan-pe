@@ -6,6 +6,7 @@ module.exports = {
     proxy: {
       '/api': 'http://localhost:3001',
     },
+    port: 8000,
   },
   webpack: {
     alias: {

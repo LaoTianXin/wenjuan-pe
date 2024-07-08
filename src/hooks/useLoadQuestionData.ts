@@ -21,12 +21,19 @@ export const useLoadQuestionData = () => {
   })
 
   useEffect(() => {
-    const { componentList = [], title = '', desc = '', js = '', css = '' } = data || {}
+    const {
+      componentList = [],
+      title = '',
+      desc = '',
+      js = '',
+      css = '',
+      isPublished = false,
+    } = data || {}
     if (componentList.length) {
       const id = componentList[0].fe_id
       dispatch(setSelectComponentId(id))
     }
-    dispatch(resetPageInfoReducer({ title, desc, js, css }))
+    dispatch(resetPageInfoReducer({ title, desc, js, css, isPublished }))
     dispatch(resetComponentList(componentList))
   }, [data])
 

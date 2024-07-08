@@ -5,6 +5,7 @@
         "craco",
         "downarrow",
         "Popconfirm",
+        "tailwindcss",
         "undoable",
         "uparrow"
     ],

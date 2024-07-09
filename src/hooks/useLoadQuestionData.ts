@@ -27,13 +27,14 @@ export const useLoadQuestionData = () => {
       desc = '',
       js = '',
       css = '',
+      _id = '',
       isPublished = false,
     } = data || {}
     if (componentList.length) {
       const id = componentList[0].fe_id
       dispatch(setSelectComponentId(id))
     }
-    dispatch(resetPageInfoReducer({ title, desc, js, css, isPublished }))
+    dispatch(resetPageInfoReducer({ title, desc, js, css, isPublished, _id }))
     dispatch(resetComponentList(componentList))
   }, [data])
 

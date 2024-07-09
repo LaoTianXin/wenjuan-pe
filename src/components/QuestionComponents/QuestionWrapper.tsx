@@ -5,6 +5,7 @@ interface QuestionWrapperPropsType {
   onClick?: (e: MouseEvent) => void
   isSelect?: boolean
   locked?: boolean
+  disabled?: boolean
 }
 
 const QuestionWrapper: FC<PropsWithChildren<QuestionWrapperPropsType>> = ({
@@ -12,6 +13,7 @@ const QuestionWrapper: FC<PropsWithChildren<QuestionWrapperPropsType>> = ({
   onClick,
   isSelect = false,
   locked = false,
+  disabled = false,
 }) => {
   const wrapperClass = classNames([
     'p-3',
@@ -22,7 +24,8 @@ const QuestionWrapper: FC<PropsWithChildren<QuestionWrapperPropsType>> = ({
     'cursor-pointer',
     isSelect ? 'border-[#1fb202]' : 'border-white',
     { 'hover:border-gray-200': !isSelect },
-    { 'opacity-50 cursor-not-allowed select-none': locked },
+    { 'opacity-50 cursor-not-allowed! select-none': locked },
+    { 'opacity-50 cursor-not-allowed! select-none pointer-events-none': disabled },
   ])
 
   return (

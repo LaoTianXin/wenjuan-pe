@@ -14,7 +14,6 @@ const propComponentList: PropComponentConfigType<QuestionRadioPropsType> = ({
       {(fields, { add, remove }, { errors }) => (
         <>
           {fields.map(({ key, name, ...prop }) => {
-            console.log()
             return (
               <Space align="baseline" key={key}>
                 <Form.Item
@@ -38,7 +37,7 @@ const propComponentList: PropComponentConfigType<QuestionRadioPropsType> = ({
                     },
                   ]}
                   {...prop}
-                  name={[name, 'text']}
+                  name={[name, 'label']}
                 >
                   <Input></Input>
                 </Form.Item>

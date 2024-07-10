@@ -1,3 +1,5 @@
+import { ChartProps } from '..'
+
 export interface CheckboxPropsType {
   label: string
   value: string
@@ -9,6 +11,10 @@ export interface QuestionCheckboxPropsType {
   checkList: CheckboxPropsType[]
   isVertical: boolean
 }
+
+export type QuestionCheckboxChartProps<
+  T extends Record<string, string | number> = Record<string, string | number>
+> = ChartProps<T>
 
 export const defaultQuestionCheckboxProps: QuestionCheckboxPropsType = {
   title: '问卷标题',

@@ -2,6 +2,7 @@ import Component from './Component'
 import { defaultQuestionRadioProps } from './interface'
 import { ComponentConfigType } from '../index'
 import PropComponent from './PropComponent'
+import ChartComponent from './ChartComponent'
 
 export * from './interface'
 
@@ -12,6 +13,7 @@ const componentConfig: ComponentConfigType = {
   group: 'QuestionFormGroup',
   Component,
   PropComponent,
+  ChartComponent,
 }
 
 export default componentConfig

@@ -12,6 +12,9 @@ const componentConfig: ComponentConfigType = {
   defaultProps: defaultQuestionTextAreaProps,
   group: 'QuestionFormGroup',
   PropComponent,
+  meta: {
+    tableWidth: 300,
+  },
 }
 
 export default componentConfig

@@ -1,3 +1,4 @@
+import { ChartProps } from '..'
 export interface OptionType {
   label: string
   value: string
@@ -9,6 +10,10 @@ export interface QuestionRadioPropsType {
   options: OptionType[]
   isVertical: boolean
 }
+
+export type QuestionRadioChartProps<
+  T extends Record<string, string | number> = Record<string, string | number>
+> = ChartProps<T>
 
 export const defaultQuestionRadioProps: QuestionRadioPropsType = {
   title: '问卷标题',

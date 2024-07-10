@@ -7,6 +7,7 @@ import { useGetPageInfo } from '@/hooks/useGetPageInfo'
 import StatHeader from './StatHeader'
 import StatLeftPanel from './StatLeftPanel'
 import StatMainPanel from './StatMainPanel'
+import StatRightPanel from './StatRightPanel'
 
 const Stat: FC = () => {
   const [selectId, setSelectId] = useState('')
@@ -32,13 +33,15 @@ const Stat: FC = () => {
 
   const showElement = (
     <>
-      <div className="shadow-2xl rounded-2xl w-[500px] h-full bg-white">
+      <div className="shadow-2xl rounded-2xl w-[400px] h-full bg-white">
         <StatLeftPanel selectId={selectId} updateSelectId={e => setSelectId(e)}></StatLeftPanel>
       </div>
       <div className="flex-1 w-full h-full bg-white shadow-2xl rounded-2xl">
         <StatMainPanel selectId={selectId} updateSelectId={e => setSelectId(e)}></StatMainPanel>
       </div>
-      <div className="shadow-2xl rounded-2xl w-[500px] h-full bg-white"></div>
+      <div className="shadow-2xl rounded-2xl w-[500px] h-full bg-white">
+        <StatRightPanel selectId={selectId}></StatRightPanel>
+      </div>
     </>
   )
 

@@ -4,9 +4,24 @@ import QuestionTitleConfig, { QuestionTitlePropsType } from './QuestionTitle'
 import QuestionParagraphConfig, { QuestionParagraphPropsType } from './QuestionParagraph'
 import QuestionInfoConfig, { QuestionInfoPropsType } from './QuestionInfo'
 import QuestionTextAreaConfig, { QuestionTextAreaPropsType } from './QuestionTextArea'
-import QuestionRadioConfig, { QuestionRadioPropsType } from './QuestionRadio'
-import QuestionCheckboxConfig, { QuestionCheckboxPropsType } from './QuestionCheckbox'
+import QuestionRadioConfig, {
+  QuestionRadioPropsType,
+  QuestionRadioChartProps,
+} from './QuestionRadio'
+import QuestionCheckboxConfig, {
+  QuestionCheckboxPropsType,
+  QuestionCheckboxChartProps,
+} from './QuestionCheckbox'
 import { PublicProps } from './utilComponent/createPropComponent'
+
+export type ChartProps<
+  T extends Record<string, string | number> = Record<string, string | number>
+> = {
+  dataKey: keyof T & string
+  nameKey: keyof T & string
+  data: T[]
+}
+
 type defaultPropsType =
   | QuestionInputPropsType
   | QuestionTitlePropsType
@@ -16,17 +31,24 @@ type defaultPropsType =
   | QuestionRadioPropsType
   | QuestionCheckboxPropsType
 
+type QuestionChartPropsType = QuestionRadioChartProps | QuestionCheckboxChartProps
+
 export type ComponentPropsType = Partial<defaultPropsType>
 
 type Group = 'QuestionFormGroup' | 'QuestionTitleGroup'
 
-export type ComponentConfigType<T extends defaultPropsType = any> = {
+export type ComponentConfigType<
+  T extends defaultPropsType = any,
+  F extends QuestionChartPropsType = ChartProps
+> = {
   title: string
   type: string
   Component: FC<Partial<T>>
   defaultProps: T
   group: Group
   PropComponent: FC<Partial<T> & PublicProps>
+  ChartComponent?: FC<Partial<F>>
+  meta?: Record<string, any>
 }
 
 export type ComponentConfigGroupType = {
@@ -45,8 +67,15 @@ const componentsConfigList: ComponentConfigType[] = [
   QuestionCheckboxConfig,
 ]
 
-export const getComponentConfigByType = (type: string) => {
-  return componentsConfigList.find(item => item.type === type) || null
+export const getComponentConfigByType = <
+  T extends defaultPropsType = any,
+  F extends QuestionChartPropsType = ChartProps
+>(
+  type: string
+) => {
+  return (
+    (componentsConfigList.find(item => item.type === type) as ComponentConfigType<T, F>) || null
+  )
 }
 
 const initialComponentConfigGroupList: Omit<ComponentConfigGroupType, 'componentConfigList'>[] = [
